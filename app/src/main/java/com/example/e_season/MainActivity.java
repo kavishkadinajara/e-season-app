@@ -1,6 +1,7 @@
 package com.example.e_season;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 
@@ -16,6 +17,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.e_season.databinding.ActivityMainBinding;
 
+import com.google.firebase.FirebaseApp;
+
 public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
@@ -27,6 +30,15 @@ public class MainActivity extends AppCompatActivity {
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        // Initialize Firebase
+        FirebaseApp.initializeApp(this);
+
+        if (FirebaseApp.getApps(this).isEmpty()) {
+            Log.d("FirebaseCheck", "Firebase is not initialized.");
+        } else {
+            Log.d("FirebaseCheck", "Firebase successfully initialized.");
+        }
 
         setSupportActionBar(binding.appBarMain.toolbar);
         binding.appBarMain.fab.setOnClickListener(new View.OnClickListener() {
