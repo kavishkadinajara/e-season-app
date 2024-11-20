@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "576561881244",
+    "project_id": "e-season",
+    "storage_bucket": "e-season.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:576561881244:android:6da8f19819ebeb14288d59",
+        "android_client_info": {
+          "package_name": "com.example.e_season"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "576561881244-u5u0o301g44ur2r7f9htvsvfk7om7nn0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.e_season",
+            "certificate_hash": "3e655f2a82d122fbf97fd17cffed7a1778c731fd"
+          }
+        },
+        {
+          "client_id": "576561881244-83bme6v101k67kvqna8deij7avkrt5j3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCrLjgp3H9xqyoH0YRfMqnC324-HFxz3rc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "576561881244-83bme6v101k67kvqna8deij7avkrt5j3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
