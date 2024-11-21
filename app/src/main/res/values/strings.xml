@@ -19,4 +19,7 @@
     <string name="monitor_your_daily_activities_and_track_your_progress_over_time">Monitor your daily activities and track your progress over time.</string>
     <string name="activity_tracking">Activity Tracking</string>
     <string name="by_pressing_continue_you_agree_to_our_terms_of_service_and_that_you_have_read_our_privacy_policy">By pressing continue, you agree to our Terms of Service and that you have read our Privacy Policy.</string>
+
+    <string name="default_web_client_id">576561881244-83bme6v101k67kvqna8deij7avkrt5j3.apps.googleusercontent.com</string>
+
 </resources>

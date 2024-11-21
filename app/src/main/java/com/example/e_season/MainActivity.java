@@ -1,5 +1,6 @@
 package com.example.e_season;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -28,12 +29,15 @@ public class MainActivity extends AppCompatActivity {
             Log.d("FirebaseCheck", "Firebase successfully initialized.");
         }
 
-        // Example: Set up a button click listener for the "Continue" button
+        // Set up a button click listener for the "Continue" button
         Button continueButton = findViewById(R.id.continue_button);
         continueButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(MainActivity.this, "Continue button clicked", Toast.LENGTH_SHORT).show();
+                // Navigate to LoginActivity
+                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                startActivity(intent);
+                Toast.makeText(MainActivity.this, "Navigating to Login Screen", Toast.LENGTH_SHORT).show();
             }
         });
     }
