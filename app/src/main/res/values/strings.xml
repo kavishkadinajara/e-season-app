@@ -10,4 +10,13 @@
     <string name="menu_home">Home</string>
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
+    <string name="chat_securely_with_friends_and_family_in_real_time">Chat securely with friends and family in real-time.</string>
+    <string name="secure_messaging">Secure Messaging</string>
+    <string name="welcome_to_your">Welcome to</string>
+    <string name="application">E-SEASON</string>
+    <string name="profile_management">Profile Management</string>
+    <string name="easily_update_and_manage_your_personal_information_settings_and_preferences">Easily update and manage your personal information, settings, and preferences.</string>
+    <string name="monitor_your_daily_activities_and_track_your_progress_over_time">Monitor your daily activities and track your progress over time.</string>
+    <string name="activity_tracking">Activity Tracking</string>
+    <string name="by_pressing_continue_you_agree_to_our_terms_of_service_and_that_you_have_read_our_privacy_policy">By pressing continue, you agree to our Terms of Service and that you have read our Privacy Policy.</string>
 </resources>
