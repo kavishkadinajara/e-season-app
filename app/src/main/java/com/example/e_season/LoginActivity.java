@@ -36,13 +36,11 @@ public class LoginActivity extends AppCompatActivity {
     // UI Components
     private EditText usernameEditText;
     private EditText passwordEditText;
-<<<<<<< Updated upstream
 
-=======
     private Button loginButton;
     private LinearLayout googleLoginContainer;
     private TextView registerLink;
->>>>>>> Stashed changes
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,15 +53,15 @@ public class LoginActivity extends AppCompatActivity {
         // Bind UI components
         usernameEditText = findViewById(R.id.usernameEditText);
         passwordEditText = findViewById(R.id.passwordEditText);
-<<<<<<< Updated upstream
+
         Button loginButton = findViewById(R.id.loginButton);
         LinearLayout googleLoginContainer = findViewById(R.id.googleLoginContainer);
         TextView registerLink = findViewById(R.id.registerLink);
-=======
+
         loginButton = findViewById(R.id.loginButton);
         googleLoginContainer = findViewById(R.id.googleLoginContainer);
         registerLink = findViewById(R.id.registerLink);
->>>>>>> Stashed changes
+
 
         // Configure Google Sign-In
         configureGoogleSignIn();
@@ -105,11 +103,9 @@ public class LoginActivity extends AppCompatActivity {
                         Toast.makeText(this, "Welcome " + user.getEmail(), Toast.LENGTH_SHORT).show();
 
                         // Navigate to Home Page
-<<<<<<< Updated upstream
+
                         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-=======
-                        Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
->>>>>>> Stashed changes
+
                         startActivity(intent);
                         finish();
                     } else {
@@ -151,11 +147,8 @@ public class LoginActivity extends AppCompatActivity {
                         Toast.makeText(this, "Welcome " + user.getDisplayName(), Toast.LENGTH_SHORT).show();
 
                         // Navigate to Home Page
-<<<<<<< Updated upstream
+
                         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-=======
-                        Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
->>>>>>> Stashed changes
                         startActivity(intent);
                         finish();
                     } else {
