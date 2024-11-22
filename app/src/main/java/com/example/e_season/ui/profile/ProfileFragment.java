@@ -1,52 +1,189 @@
 package com.example.e_season.ui.profile;
 
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.TextView;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
 
-import com.example.e_season.databinding.FragmentProfileBinding;
+import com.example.e_season.R;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.HashMap;
 
 public class ProfileFragment extends Fragment {
 
-    private FragmentProfileBinding binding;
+    private static final String TAG = "ProfileFragment";
+
+    private EditText editFullName, editAddress, editTelephone, editEmail;
+    private Button updateProfileButton, changePasswordButton, editProfileButton;
+    private DatabaseReference databaseReference;
+    private FirebaseAuth firebaseAuth;
+    private FirebaseUser currentUser;
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
-        ProfileViewModel profileViewModel =
-                new ViewModelProvider(this).get(ProfileViewModel.class);
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View root = inflater.inflate(R.layout.fragment_profile, container, false);
 
-        binding = FragmentProfileBinding.inflate(inflater, container, false);
-        View root = binding.getRoot();
+        firebaseAuth = FirebaseAuth.getInstance();
+        currentUser = firebaseAuth.getCurrentUser();
 
-        final TextView textView = binding.textProfile;
-        profileViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
+        editFullName = root.findViewById(R.id.editFullName);
+        editAddress = root.findViewById(R.id.editAddress);
+        editTelephone = root.findViewById(R.id.editTelephone);
+        editEmail = root.findViewById(R.id.editEmail);
+        editEmail.setEnabled(false); // Make email field read-only
+        updateProfileButton = root.findViewById(R.id.updateProfileButton);
+        changePasswordButton = root.findViewById(R.id.changePasswordButton);
+        editProfileButton = root.findViewById(R.id.editProfileButton);
 
-        // Set up buttons
-        Button updateProfileButton = binding.updateProfileButton;
-        Button changePasswordButton = binding.changePasswordButton;
+        if (currentUser != null) {
+            String userId = currentUser.getUid();
+            String userEmail = currentUser.getEmail();
 
-        updateProfileButton.setOnClickListener(v -> {
-            // Handle update profile button click
-        });
+            Log.d(TAG, "User ID: " + userId);
+            Log.d(TAG, "User Email: " + userEmail);
 
-        changePasswordButton.setOnClickListener(v -> {
-            // Handle change password button click
-        });
+            databaseReference = FirebaseDatabase.getInstance().getReference("Users").child(userId);
+            checkAndInitializeUser();
+            loadUserProfile();
+        }
+
+        updateProfileButton.setOnClickListener(v -> updateProfile());
+        changePasswordButton.setOnClickListener(v -> changePassword());
+        editProfileButton.setOnClickListener(v -> toggleEditMode(true));
+
+        // Initially make all fields read-only
+        toggleEditMode(false);
 
         return root;
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        binding = null;
+    private void checkAndInitializeUser() {
+        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (!snapshot.exists()) {
+                    Log.d(TAG, "User not found in database. Initializing user...");
+                    HashMap<String, String> userProfile = new HashMap<>();
+                    userProfile.put("email", currentUser.getEmail());
+                    userProfile.put("fullName", ""); // Initialize as empty
+                    userProfile.put("address", "");
+                    userProfile.put("telephone", "");
+
+                    databaseReference.setValue(userProfile).addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            Log.d(TAG, "User initialized successfully in database.");
+                            Toast.makeText(getContext(), "User initialized successfully", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Log.e(TAG, "Failed to initialize user in database.");
+                            Toast.makeText(getContext(), "Failed to initialize user", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                } else {
+                    Log.d(TAG, "User already exists in database.");
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.e(TAG, "Database error: " + error.getMessage());
+                Toast.makeText(getContext(), "Error: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void loadUserProfile() {
+        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    String fullName = snapshot.child("fullName").getValue(String.class);
+                    String address = snapshot.child("address").getValue(String.class);
+                    String telephone = snapshot.child("telephone").getValue(String.class);
+                    String email = snapshot.child("email").getValue(String.class);
+
+                    editFullName.setText(fullName);
+                    editAddress.setText(address);
+                    editTelephone.setText(telephone);
+                    editEmail.setText(email);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.e(TAG, "Database error: " + error.getMessage());
+                Toast.makeText(getContext(), "Error: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void updateProfile() {
+        String fullName = editFullName.getText().toString().trim();
+        String address = editAddress.getText().toString().trim();
+        String telephone = editTelephone.getText().toString().trim();
+
+        if (TextUtils.isEmpty(fullName) || TextUtils.isEmpty(address) || TextUtils.isEmpty(telephone)) {
+            Toast.makeText(getContext(), "All fields are required", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        HashMap<String, Object> updatedFields = new HashMap<>();
+        updatedFields.put("fullName", fullName);
+        updatedFields.put("address", address);
+        updatedFields.put("telephone", telephone);
+
+        Log.d(TAG, "Updating profile with: " + updatedFields.toString());
+
+        databaseReference.updateChildren(updatedFields).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                Log.d(TAG, "Profile updated successfully.");
+                Toast.makeText(getContext(), "Profile updated successfully", Toast.LENGTH_SHORT).show();
+                toggleEditMode(false); // Make fields read-only after update
+            } else {
+                Log.e(TAG, "Failed to update profile.");
+                Toast.makeText(getContext(), "Failed to update profile", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void changePassword() {
+        if (currentUser != null && currentUser.getEmail() != null) {
+            Log.d(TAG, "Sending password reset email to: " + currentUser.getEmail());
+            firebaseAuth.sendPasswordResetEmail(currentUser.getEmail())
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            Log.d(TAG, "Password reset email sent successfully.");
+                            Toast.makeText(getContext(), "Password reset email sent", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Log.e(TAG, "Failed to send password reset email.");
+                            Toast.makeText(getContext(), "Failed to send reset email", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        } else {
+            Log.e(TAG, "Error: Unable to fetch user email.");
+            Toast.makeText(getContext(), "Error: Unable to fetch user email", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void toggleEditMode(boolean isEditable) {
+        editFullName.setEnabled(isEditable);
+        editAddress.setEnabled(isEditable);
+        editTelephone.setEnabled(isEditable);
+        updateProfileButton.setVisibility(isEditable ? View.VISIBLE : View.GONE);
+        editProfileButton.setVisibility(isEditable ? View.GONE : View.VISIBLE);
     }
 }

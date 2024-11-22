@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "576561881244",
+    "firebase_url": "https://e-season-default-rtdb.asia-southeast1.firebasedatabase.app",
     "project_id": "e-season",
     "storage_bucket": "e-season.firebasestorage.app"
   },
