@@ -36,11 +36,9 @@ public class LoginActivity extends AppCompatActivity {
     // UI Components
     private EditText usernameEditText;
     private EditText passwordEditText;
-
     private Button loginButton;
     private LinearLayout googleLoginContainer;
     private TextView registerLink;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,15 +51,9 @@ public class LoginActivity extends AppCompatActivity {
         // Bind UI components
         usernameEditText = findViewById(R.id.usernameEditText);
         passwordEditText = findViewById(R.id.passwordEditText);
-
-        Button loginButton = findViewById(R.id.loginButton);
-        LinearLayout googleLoginContainer = findViewById(R.id.googleLoginContainer);
-        TextView registerLink = findViewById(R.id.registerLink);
-
         loginButton = findViewById(R.id.loginButton);
         googleLoginContainer = findViewById(R.id.googleLoginContainer);
         registerLink = findViewById(R.id.registerLink);
-
 
         // Configure Google Sign-In
         configureGoogleSignIn();
@@ -76,6 +68,7 @@ public class LoginActivity extends AppCompatActivity {
         registerLink.setOnClickListener(v -> {
             Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
             startActivity(intent);
+            Toast.makeText(LoginActivity.this, "Navigating to Register Screen", Toast.LENGTH_SHORT).show();
         });
     }
 
@@ -103,9 +96,7 @@ public class LoginActivity extends AppCompatActivity {
                         Toast.makeText(this, "Welcome " + user.getEmail(), Toast.LENGTH_SHORT).show();
 
                         // Navigate to Home Page
-
                         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-
                         startActivity(intent);
                         finish();
                     } else {
@@ -147,7 +138,6 @@ public class LoginActivity extends AppCompatActivity {
                         Toast.makeText(this, "Welcome " + user.getDisplayName(), Toast.LENGTH_SHORT).show();
 
                         // Navigate to Home Page
-
                         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                         startActivity(intent);
                         finish();
