@@ -97,7 +97,7 @@ public class RegisterActivity extends AppCompatActivity {
                         Toast.makeText(this, "Welcome " + fullName + "!", Toast.LENGTH_SHORT).show();
 
                         // Navigate to MainActivity or login
-                        Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
+                        Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
                         startActivity(intent);
                         finish();
                     } else {
