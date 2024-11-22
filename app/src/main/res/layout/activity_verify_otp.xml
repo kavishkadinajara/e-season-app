@@ -6,40 +6,52 @@
 
     <!-- Title -->
     <TextView
-        android:id="@+id/resetPasswordTitle"
+        android:id="@+id/verifyOtpTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="24dp"
         android:gravity="center"
-        android:text="Reset Password"
+        android:text="Verify OTP"
         android:textColor="#2196F3"
         android:textSize="35sp"
         android:textStyle="bold" />
 
-    <!-- Email Field -->
+    <!-- OTP Field -->
     <EditText
-        android:id="@+id/emailEditText"
+        android:id="@+id/otpEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/resetPasswordTitle"
+        android:layout_below="@id/verifyOtpTitle"
         android:layout_marginTop="16dp"
         android:background="@drawable/edit_text_background"
-        android:drawableStart="@drawable/ic_email"
+        android:drawableStart="@drawable/ic_otp"
         android:drawablePadding="10dp"
-        android:hint="Enter Your Email Address"
-        android:inputType="textEmailAddress"
+        android:hint="Enter OTP"
+        android:inputType="number"
         android:padding="12dp"
         android:textSize="16sp" />
 
-    <!-- Send OTP Button -->
+    <!-- Timer Text -->
+    <TextView
+        android:id="@+id/timerTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/otpEditText"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp"
+        android:text="00:30"
+        android:textColor="#FF0000"
+        android:textSize="18sp" />
+
+    <!-- Verify OTP Button -->
     <Button
-        android:id="@+id/sendOtpButton"
+        android:id="@+id/verifyOtpButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/emailEditText"
+        android:layout_below="@id/timerTextView"
         android:layout_marginTop="20dp"
         android:backgroundTint="#4CAF50"
-        android:text="Send OTP"
+        android:text="Verify OTP"
         android:textColor="#FFFFFF"
         android:padding="16dp"
         android:textSize="18sp" />
