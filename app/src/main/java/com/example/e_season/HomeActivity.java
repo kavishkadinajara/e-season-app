@@ -25,7 +25,7 @@ public class HomeActivity extends AppCompatActivity {
 
         // Set up AppBarConfiguration for navigation
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow) // Add menu IDs here
+                R.id.nav_home, R.id.nav_seasons, R.id.nav_time_table, R.id.nav_profile) // Add menu IDs here
                 .setOpenableLayout(drawer)
                 .build();
 
