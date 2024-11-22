@@ -54,6 +54,7 @@ public class LoginActivity extends AppCompatActivity {
         loginButton = findViewById(R.id.loginButton);
         googleLoginContainer = findViewById(R.id.googleLoginContainer);
         registerLink = findViewById(R.id.registerLink);
+        View passwordResetLink = findViewById(R.id.forgotPasswordLink);
 
         // Configure Google Sign-In
         configureGoogleSignIn();
@@ -69,6 +70,13 @@ public class LoginActivity extends AppCompatActivity {
             Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
             startActivity(intent);
             Toast.makeText(LoginActivity.this, "Navigating to Register Screen", Toast.LENGTH_SHORT).show();
+        });
+
+        // Navigate to Reset Password Page
+        passwordResetLink.setOnClickListener(v -> {
+            Intent intent = new Intent(LoginActivity.this, ResetPasswordActivity.class);
+            startActivity(intent);
+            Toast.makeText(LoginActivity.this, "Navigating to reset password Screen", Toast.LENGTH_SHORT).show();
         });
     }
 
