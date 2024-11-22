@@ -6,18 +6,24 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+<<<<<<< HEAD
 import android.widget.Toast;
+=======
+import android.widget.TextView;
+>>>>>>> b807641cf13458757568713db1280044f7c772ee
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.e_season.R;
 import com.example.e_season.databinding.FragmentHomeBinding;
 
 public class HomeFragment extends Fragment {
 
     private FragmentHomeBinding binding;
 
+    @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         HomeViewModel homeViewModel =
@@ -26,6 +32,7 @@ public class HomeFragment extends Fragment {
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
+<<<<<<< HEAD
         // Observe ViewModel and set dynamic text
         homeViewModel.getText().observe(getViewLifecycleOwner(), binding.title::setText);
 
@@ -44,6 +51,29 @@ public class HomeFragment extends Fragment {
         binding.homeImage.setOnClickListener(view -> 
             Toast.makeText(getContext(), "Image Clicked", Toast.LENGTH_SHORT).show()
         );
+=======
+        final TextView titleTextView = binding.title;
+        final ImageView homeImageView = binding.homeImage;
+        final TextView descriptionTextView = binding.description;
+        final Button button1 = binding.button1;
+        final Button button2 = binding.button2;
+        final Button button3 = binding.button3;
+
+        homeViewModel.getText().observe(getViewLifecycleOwner(), titleTextView::setText);
+
+        // Set up button click listeners
+        button1.setOnClickListener(v -> {
+            // Handle Feature 1 button click
+        });
+
+        button2.setOnClickListener(v -> {
+            // Handle Feature 2 button click
+        });
+
+        button3.setOnClickListener(v -> {
+            // Handle Feature 3 button click
+        });
+>>>>>>> b807641cf13458757568713db1280044f7c772ee
 
         return root;
     }
