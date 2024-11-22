@@ -9,8 +9,8 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.FirebaseApp;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -28,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
         FirebaseApp.initializeApp(this);
         mAuth = FirebaseAuth.getInstance();
 
+        // Log Firebase initialization status
         if (FirebaseApp.getApps(this).isEmpty()) {
             Log.d("FirebaseCheck", "Firebase is not initialized.");
         } else {
@@ -36,22 +37,25 @@ public class MainActivity extends AppCompatActivity {
 
         // Check if the user is already logged in
         if (mAuth.getCurrentUser() != null) {
-            // If user is logged in, navigate to the Dashboard
-            Intent intent = new Intent(MainActivity.this, ResetPasswordActivity.class);
+            // If the user is logged in, navigate directly to the HomeActivity
+            Intent intent = new Intent(MainActivity.this, HomeActivity.class);
             startActivity(intent);
-            finish();  // Close MainActivity to prevent the user from coming back to it
+            finish(); // Close MainActivity so it doesn't stay in the back stack
         } else {
-            // If user is not logged in, show the MainActivity screen
-            Button continueButton = findViewById(R.id.continue_button);
-            continueButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    // Navigate to LoginActivity
-                    Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-                    startActivity(intent);
-                    Toast.makeText(MainActivity.this, "Navigating to Login Screen", Toast.LENGTH_SHORT).show();
-                }
-            });
+            // If the user is not logged in, show the welcome page
+            setupWelcomePage();
         }
+    }
+
+    // Set up the welcome page with a button to navigate to LoginActivity
+    private void setupWelcomePage() {
+        Button continueButton = findViewById(R.id.continue_button);
+        continueButton.setVisibility(View.VISIBLE); // Ensure the button is visible
+        continueButton.setOnClickListener(view -> {
+            // Navigate to LoginActivity
+            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+            startActivity(intent);
+            Toast.makeText(MainActivity.this, "Navigating to Login Screen", Toast.LENGTH_SHORT).show();
+        });
     }
 }

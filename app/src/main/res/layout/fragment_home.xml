@@ -33,7 +33,7 @@
         app:layout_constraintTop_toBottomOf="@id/title"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:contentDescription="Home Image" />
+        android:contentDescription="Tap to explore more features" />
 
     <!-- Description Text -->
     <TextView
@@ -58,9 +58,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="Feature 1"
-        android:backgroundTint="@color/button1_color"
         android:textColor="@android:color/white"
-        android:background="@drawable/button_background"
         app:layout_constraintTop_toBottomOf="@id/description"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -74,9 +72,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="Feature 2"
-        android:backgroundTint="@color/button2_color"
         android:textColor="@android:color/white"
-        android:background="@drawable/button_background"
         app:layout_constraintTop_toBottomOf="@id/button1"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -90,9 +86,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="Feature 3"
-        android:backgroundTint="@color/button3_color"
         android:textColor="@android:color/white"
-        android:background="@drawable/button_background"
         app:layout_constraintTop_toBottomOf="@id/button2"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

@@ -4,7 +4,9 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -24,8 +26,25 @@ public class HomeFragment extends Fragment {
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        final TextView textView = binding.textHome;
-        homeViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
+        // Observe ViewModel and set dynamic text
+        homeViewModel.getText().observe(getViewLifecycleOwner(), binding.title::setText);
+
+        // Setup click listeners for buttons
+        binding.button1.setOnClickListener(view -> 
+            Toast.makeText(getContext(), "Feature 1 Clicked", Toast.LENGTH_SHORT).show()
+        );
+        binding.button2.setOnClickListener(view -> 
+            Toast.makeText(getContext(), "Feature 2 Clicked", Toast.LENGTH_SHORT).show()
+        );
+        binding.button3.setOnClickListener(view -> 
+            Toast.makeText(getContext(), "Feature 3 Clicked", Toast.LENGTH_SHORT).show()
+        );
+
+        // Example use of ImageView
+        binding.homeImage.setOnClickListener(view -> 
+            Toast.makeText(getContext(), "Image Clicked", Toast.LENGTH_SHORT).show()
+        );
+
         return root;
     }
 
