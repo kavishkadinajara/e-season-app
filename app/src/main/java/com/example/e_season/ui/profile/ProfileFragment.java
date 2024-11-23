@@ -1,5 +1,6 @@
 package com.example.e_season.ui.profile;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -13,6 +14,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import com.example.e_season.MainActivity;
 import com.example.e_season.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -29,7 +31,7 @@ public class ProfileFragment extends Fragment {
     private static final String TAG = "ProfileFragment";
 
     private EditText editFullName, editAddress, editTelephone, editEmail;
-    private Button updateProfileButton, changePasswordButton, editProfileButton;
+    private Button updateProfileButton, changePasswordButton, editProfileButton, logoutButton;
     private DatabaseReference databaseReference;
     private FirebaseAuth firebaseAuth;
     private FirebaseUser currentUser;
@@ -49,6 +51,7 @@ public class ProfileFragment extends Fragment {
         updateProfileButton = root.findViewById(R.id.updateProfileButton);
         changePasswordButton = root.findViewById(R.id.changePasswordButton);
         editProfileButton = root.findViewById(R.id.editProfileButton);
+        logoutButton = root.findViewById(R.id.logoutButton);
 
         if (currentUser != null) {
             String userId = currentUser.getUid();
@@ -65,6 +68,7 @@ public class ProfileFragment extends Fragment {
         updateProfileButton.setOnClickListener(v -> updateProfile());
         changePasswordButton.setOnClickListener(v -> changePassword());
         editProfileButton.setOnClickListener(v -> toggleEditMode(true));
+        logoutButton.setOnClickListener(v -> logout());
 
         // Initially make all fields read-only
         toggleEditMode(false);
@@ -185,5 +189,13 @@ public class ProfileFragment extends Fragment {
         editTelephone.setEnabled(isEditable);
         updateProfileButton.setVisibility(isEditable ? View.VISIBLE : View.GONE);
         editProfileButton.setVisibility(isEditable ? View.GONE : View.VISIBLE);
+    }
+
+    private void logout() {
+        firebaseAuth.signOut();
+        Intent intent = new Intent(getActivity(), MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+        getActivity().finish();
     }
 }

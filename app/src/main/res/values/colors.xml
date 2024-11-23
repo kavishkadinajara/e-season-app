@@ -19,4 +19,12 @@
     <color name="button3_color">#2196F3</color>
     <color name="button_color">#4CAF50</color>
     <color name="link_color">#2196F3</color>
+    <!-- <color name="background_color">#F9F9F9</color> -->
+    <!-- <color name="primary">#4CAF50</color> -->
+    <color name="secondary">#2196F3</color>
+    <color name="error">#F44336</color>
+    <color name="primary_text">#212121</color>
+    <!-- <color name="white">#FFFFFF</color> -->
+    <color name="primary_text_color">#000000</color>
+
 </resources>

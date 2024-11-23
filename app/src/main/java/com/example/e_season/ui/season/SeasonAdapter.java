@@ -42,6 +42,11 @@ public class SeasonAdapter extends RecyclerView.Adapter<SeasonAdapter.ViewHolder
         return seasonList.size();
     }
 
+    public void updateData(List<Season> newSeasonList) {
+        this.seasonList = newSeasonList;
+        notifyDataSetChanged();
+    }
+
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public TextView startStationTextView;
         public TextView endStationTextView;
