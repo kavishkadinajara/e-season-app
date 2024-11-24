@@ -9,60 +9,52 @@
     android:elevation="4dp">
 
     <TextView
-        android:id="@+id/yourStationTextView"
+        android:id="@+id/departureTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:text="Departure"
         android:textSize="18sp"
         android:textStyle="bold"
         android:textColor="@color/primary_text_color"
         android:paddingBottom="8dp" />
 
     <TextView
-        android:id="@+id/arrivalTimeTextView"
+        android:id="@+id/arrivalTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:text="Arrival"
         android:textSize="16sp"
         android:textColor="@color/secondary_text_color" />
 
     <TextView
-        android:id="@+id/departureTimeTextView"
+        android:id="@+id/durationTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:text="Duration"
         android:textSize="16sp"
         android:textColor="@color/secondary_text_color" />
 
     <TextView
-        android:id="@+id/destinationTimeTextView"
+        android:id="@+id/trainEndsAtTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:text="Train Ends At"
         android:textSize="16sp"
         android:textColor="@color/secondary_text_color" />
 
     <TextView
-        android:id="@+id/endStationTimeTextView"
+        android:id="@+id/trainNoTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:text="Train No"
         android:textSize="16sp"
         android:textColor="@color/secondary_text_color" />
 
     <TextView
-        android:id="@+id/frequencyTextView"
+        android:id="@+id/trainTypeTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="16sp"
-        android:textColor="@color/secondary_text_color" />
-
-    <TextView
-        android:id="@+id/nameTextView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="16sp"
-        android:textColor="@color/secondary_text_color" />
-
-    <TextView
-        android:id="@+id/typeTextView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:text="Train Type"
         android:textSize="16sp"
         android:textColor="@color/secondary_text_color" />
 

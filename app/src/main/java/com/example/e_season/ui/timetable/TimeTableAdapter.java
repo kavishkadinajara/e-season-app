@@ -31,14 +31,12 @@ public class TimeTableAdapter extends RecyclerView.Adapter<TimeTableAdapter.Time
     @Override
     public void onBindViewHolder(@NonNull TimeTableViewHolder holder, int position) {
         TimeTable timeTable = timeTables.get(position);
-        holder.yourStationTextView.setText(timeTable.getYourStation());
-        holder.arrivalTimeTextView.setText(timeTable.getArrivalTime());
-        holder.departureTimeTextView.setText(timeTable.getDepartureTime());
-        holder.destinationTimeTextView.setText(timeTable.getDestinationTime());
-        holder.endStationTimeTextView.setText(timeTable.getEndStationTime());
-        holder.frequencyTextView.setText(timeTable.getFrequency());
-        holder.nameTextView.setText(timeTable.getName());
-        holder.typeTextView.setText(timeTable.getType());
+        holder.departureTextView.setText(timeTable.getDeparture());
+        holder.arrivalTextView.setText(timeTable.getArrival());
+        holder.durationTextView.setText(timeTable.getDuration());
+        holder.trainEndsAtTextView.setText(timeTable.getTrainEndsAt());
+        holder.trainNoTextView.setText(timeTable.getTrainNo());
+        holder.trainTypeTextView.setText(timeTable.getTrainType());
     }
 
     @Override
@@ -53,25 +51,21 @@ public class TimeTableAdapter extends RecyclerView.Adapter<TimeTableAdapter.Time
 
     static class TimeTableViewHolder extends RecyclerView.ViewHolder {
 
-        TextView yourStationTextView;
-        TextView arrivalTimeTextView;
-        TextView departureTimeTextView;
-        TextView destinationTimeTextView;
-        TextView endStationTimeTextView;
-        TextView frequencyTextView;
-        TextView nameTextView;
-        TextView typeTextView;
+        TextView departureTextView;
+        TextView arrivalTextView;
+        TextView durationTextView;
+        TextView trainEndsAtTextView;
+        TextView trainNoTextView;
+        TextView trainTypeTextView;
 
         public TimeTableViewHolder(@NonNull View itemView) {
             super(itemView);
-            yourStationTextView = itemView.findViewById(R.id.yourStationTextView);
-            arrivalTimeTextView = itemView.findViewById(R.id.arrivalTimeTextView);
-            departureTimeTextView = itemView.findViewById(R.id.departureTimeTextView);
-            destinationTimeTextView = itemView.findViewById(R.id.destinationTimeTextView);
-            endStationTimeTextView = itemView.findViewById(R.id.endStationTimeTextView);
-            frequencyTextView = itemView.findViewById(R.id.frequencyTextView);
-            nameTextView = itemView.findViewById(R.id.nameTextView);
-            typeTextView = itemView.findViewById(R.id.typeTextView);
+            departureTextView = itemView.findViewById(R.id.departureTextView);
+            arrivalTextView = itemView.findViewById(R.id.arrivalTextView);
+            durationTextView = itemView.findViewById(R.id.durationTextView);
+            trainEndsAtTextView = itemView.findViewById(R.id.trainEndsAtTextView);
+            trainNoTextView = itemView.findViewById(R.id.trainNoTextView);
+            trainTypeTextView = itemView.findViewById(R.id.trainTypeTextView);
         }
     }
 }

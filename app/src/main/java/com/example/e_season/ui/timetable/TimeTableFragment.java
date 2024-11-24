@@ -2,12 +2,12 @@ package com.example.e_season.ui.timetable;
 
 import android.app.DatePickerDialog;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.e_season.R;
 import com.example.e_season.databinding.FragmentTimetableBinding;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -25,6 +26,8 @@ import java.util.List;
 import java.util.Locale;
 
 public class TimeTableFragment extends Fragment {
+
+    private static final String TAG = "TimeTableFragment";
 
     private FragmentTimetableBinding binding;
     private TimeTableAdapter adapter;
@@ -47,7 +50,10 @@ public class TimeTableFragment extends Fragment {
             // Observe the timetable data
             timeTableViewModel.getTimeTables().observe(getViewLifecycleOwner(), timeTables -> {
                 if (timeTables != null) {
+                    Log.d(TAG, "TimeTables updated: " + timeTables.size());
                     adapter.setTimeTableList(timeTables);
+                } else {
+                    Log.d(TAG, "TimeTables is null");
                 }
             });
 
@@ -64,7 +70,7 @@ public class TimeTableFragment extends Fragment {
             binding.searchDateEditText.setOnClickListener(v -> showDatePicker());
         } catch (Exception e) {
             e.printStackTrace();
-            Toast.makeText(getContext(), "An error occurred during initialization: " + e.getMessage(), Toast.LENGTH_LONG).show();
+            showErrorSnackbar("An error occurred during initialization: " + e.getMessage());
         }
 
         return root;
@@ -80,11 +86,12 @@ public class TimeTableFragment extends Fragment {
                 getActivity().runOnUiThread(() -> {
                     populateSpinner(binding.startStationSpinner, startStations);
                     populateSpinner(binding.endStationSpinner, endStations);
+                    showSuccessSnackbar("Fetched start and end stations successfully.");
                 });
             } catch (IOException e) {
-                getActivity().runOnUiThread(() ->
-                        Toast.makeText(getContext(), "Failed to fetch data: " + e.getMessage(), Toast.LENGTH_LONG).show()
-                );
+                getActivity().runOnUiThread(() -> {
+                    showErrorSnackbar("Failed to fetch data: " + e.getMessage());
+                });
             }
         }).start();
     }
@@ -93,31 +100,28 @@ public class TimeTableFragment extends Fragment {
         try {
             final String startStation = binding.startStationSpinner.getSelectedItem().toString();
             final String endStation = binding.endStationSpinner.getSelectedItem().toString();
-            final String date = binding.searchDateEditText.getText().toString();
 
-            // Format the date to YYYY-MM-DD
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-            Calendar calendar = Calendar.getInstance();
-            try {
-                calendar.setTime(new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).parse(date));
-                final String formattedDate = sdf.format(calendar.getTime());
-
-                TimeTableScraper scraper = new TimeTableScraper();
-                new Thread(() -> {
-                    try {
-                        List<TimeTable> timeTableList = scraper.getTimeTable(startStation, endStation, formattedDate);
-                        getActivity().runOnUiThread(() -> timeTableViewModel.setTimeTableList(timeTableList));
-                    } catch (IOException e) {
-                        getActivity().runOnUiThread(() ->
-                                Toast.makeText(getContext(), "Failed to fetch timetable: " + e.getMessage(), Toast.LENGTH_LONG).show()
-                        );
-                    }
-                }).start();
-            } catch (Exception e) {
-                Toast.makeText(getContext(), "Invalid date format: " + e.getMessage(), Toast.LENGTH_LONG).show();
-            }
+            TimeTableScraper scraper = new TimeTableScraper();
+            new Thread(() -> {
+                try {
+                    List<TimeTable> timeTableList = scraper.getTimeTable(startStation, endStation);
+                    Log.d(TAG, "Fetched TimeTables: " + timeTableList.size());
+                    getActivity().runOnUiThread(() -> {
+                        timeTableViewModel.setTimeTableList(timeTableList);
+                        if (timeTableList.isEmpty()) {
+                            showErrorSnackbar("No timetable data found.");
+                        } else {
+                            showSuccessSnackbar("Fetched timetable data successfully.");
+                        }
+                    });
+                } catch (IOException e) {
+                    getActivity().runOnUiThread(() -> {
+                        showErrorSnackbar("Failed to fetch timetable: " + e.getMessage());
+                    });
+                }
+            }).start();
         } catch (Exception e) {
-            Toast.makeText(getContext(), "An error occurred while fetching timetable: " + e.getMessage(), Toast.LENGTH_LONG).show();
+            showErrorSnackbar("An error occurred while fetching timetable: " + e.getMessage());
         }
     }
 
@@ -127,9 +131,10 @@ public class TimeTableFragment extends Fragment {
             binding.endStationSpinner.setSelection(0);
             binding.searchDateEditText.setText("");
             timeTableViewModel.setTimeTableList(null);
+            showSuccessSnackbar("Fields reset successfully.");
         } catch (Exception e) {
             e.printStackTrace();
-            Toast.makeText(getContext(), "An error occurred while resetting fields: " + e.getMessage(), Toast.LENGTH_LONG).show();
+            showErrorSnackbar("An error occurred while resetting fields: " + e.getMessage());
         }
     }
 
@@ -140,7 +145,7 @@ public class TimeTableFragment extends Fragment {
             spinner.setAdapter(adapter);
         } catch (Exception e) {
             e.printStackTrace();
-            Toast.makeText(getContext(), "An error occurred while populating spinner: " + e.getMessage(), Toast.LENGTH_LONG).show();
+            showErrorSnackbar("An error occurred while populating spinner: " + e.getMessage());
         }
     }
 
@@ -159,8 +164,30 @@ public class TimeTableFragment extends Fragment {
             datePickerDialog.show();
         } catch (Exception e) {
             e.printStackTrace();
-            Toast.makeText(getContext(), "An error occurred while showing date picker: " + e.getMessage(), Toast.LENGTH_LONG).show();
+            showErrorSnackbar("An error occurred while showing date picker: " + e.getMessage());
         }
+    }
+
+    private void showErrorSnackbar(String message) {
+        Snackbar snackbar = Snackbar.make(binding.getRoot(), message, Snackbar.LENGTH_LONG);
+        snackbar.setAction("Copy", v -> {
+            android.content.ClipboardManager clipboard = (android.content.ClipboardManager) getContext().getSystemService(android.content.Context.CLIPBOARD_SERVICE);
+            android.content.ClipData clip = android.content.ClipData.newPlainText("Error Message", message);
+            clipboard.setPrimaryClip(clip);
+            Snackbar.make(binding.getRoot(), "Error message copied to clipboard", Snackbar.LENGTH_SHORT).show();
+        });
+        snackbar.show();
+    }
+
+    private void showSuccessSnackbar(String message) {
+        Snackbar snackbar = Snackbar.make(binding.getRoot(), message, Snackbar.LENGTH_LONG);
+        snackbar.setAction("Copy", v -> {
+            android.content.ClipboardManager clipboard = (android.content.ClipboardManager) getContext().getSystemService(android.content.Context.CLIPBOARD_SERVICE);
+            android.content.ClipData clip = android.content.ClipData.newPlainText("Success Message", message);
+            clipboard.setPrimaryClip(clip);
+            Snackbar.make(binding.getRoot(), "Success message copied to clipboard", Snackbar.LENGTH_SHORT).show();
+        });
+        snackbar.show();
     }
 
     @Override
