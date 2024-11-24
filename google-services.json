@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "576561881244",
+    "firebase_url": "https://e-season-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "e-season",
+    "storage_bucket": "e-season.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:576561881244:android:6da8f19819ebeb14288d59",
+        "android_client_info": {
+          "package_name": "com.example.e_season"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "576561881244-1ut8icbgfbr8b2alf8k9hdmq6anqs819.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.e_season",
+            "certificate_hash": "299cc4732b182f83e4e422c58c3d1732279f7de8"
+          }
+        },
+        {
+          "client_id": "576561881244-83bme6v101k67kvqna8deij7avkrt5j3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCrLjgp3H9xqyoH0YRfMqnC324-HFxz3rc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "576561881244-83bme6v101k67kvqna8deij7avkrt5j3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

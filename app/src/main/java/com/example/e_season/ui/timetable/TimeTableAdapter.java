@@ -4,6 +4,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -26,11 +27,16 @@ public class TimeTableAdapter extends RecyclerView.Adapter<TimeTableAdapter.Time
 
     @Override
     public void onBindViewHolder(@NonNull TimeTableViewHolder holder, int position) {
-        TimeTable timeTable = timeTableList.get(position);
-        holder.startStationTextView.setText(timeTable.getStartStation());
-        holder.endStationTextView.setText(timeTable.getEndStation());
-        holder.startTimeTextView.setText(timeTable.getStartTime());
-        holder.endTimeTextView.setText(timeTable.getEndTime());
+        try {
+            TimeTable timeTable = timeTableList.get(position);
+            holder.startStationTextView.setText(timeTable.getStartStation());
+            holder.endStationTextView.setText(timeTable.getEndStation());
+            holder.startTimeTextView.setText(timeTable.getStartTime());
+            holder.endTimeTextView.setText(timeTable.getEndTime());
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(holder.itemView.getContext(), "An error occurred while binding data: " + e.getMessage(), Toast.LENGTH_LONG).show();
+        }
     }
 
     @Override

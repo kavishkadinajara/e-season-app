@@ -1,5 +1,9 @@
 package com.example.e_season.ui.season;
 
+import android.content.Context;
+import android.util.Log;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -21,8 +25,10 @@ public class SeasonViewModel extends ViewModel {
     private final MutableLiveData<List<Season>> seasons;
     private DatabaseReference databaseReference;
     private FirebaseAuth mAuth;
+    private Context context;
 
-    public SeasonViewModel() {
+    public SeasonViewModel(Context context) {
+        this.context = context;
         seasons = new MutableLiveData<>();
         mAuth = FirebaseAuth.getInstance();
         databaseReference = FirebaseDatabase.getInstance().getReference("seasons");
@@ -34,27 +40,38 @@ public class SeasonViewModel extends ViewModel {
     }
 
     private void loadSeasons() {
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        if (currentUser != null) {
-            String userEmail = currentUser.getEmail();
-            databaseReference.orderByChild("userEmail").equalTo(userEmail).addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    List<Season> seasonList = new ArrayList<>();
-                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                        Season season = snapshot.getValue(Season.class);
-                        if (season != null) {
-                            seasonList.add(season);
+        try {
+            FirebaseUser currentUser = mAuth.getCurrentUser();
+            if (currentUser != null) {
+                String userEmail = currentUser.getEmail();
+                databaseReference.orderByChild("userEmail").equalTo(userEmail).addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        try {
+                            List<Season> seasonList = new ArrayList<>();
+                            for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                                Season season = snapshot.getValue(Season.class);
+                                if (season != null) {
+                                    seasonList.add(season);
+                                }
+                            }
+                            seasons.setValue(seasonList);
+                        } catch (Exception e) {
+                            Log.e("SeasonViewModel", "Exception in onDataChange", e);
+                            Toast.makeText(context, "An error occurred while loading seasons", Toast.LENGTH_SHORT).show();
                         }
                     }
-                    seasons.setValue(seasonList);
-                }
 
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-                    // Handle possible errors.
-                }
-            });
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                        Log.e("SeasonViewModel", "Failed to load seasons: " + databaseError.getMessage());
+                        Toast.makeText(context, "Failed to load seasons", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        } catch (Exception e) {
+            Log.e("SeasonViewModel", "Exception in loadSeasons", e);
+            Toast.makeText(context, "An error occurred while loading seasons", Toast.LENGTH_SHORT).show();
         }
     }
 }

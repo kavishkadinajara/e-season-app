@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.DatePicker;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -37,29 +36,34 @@ public class TimeTableFragment extends Fragment {
         binding = FragmentTimetableBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        // Initialize RecyclerView
-        binding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter = new TimeTableAdapter();
-        binding.recyclerView.setAdapter(adapter);
+        try {
+            // Initialize RecyclerView
+            binding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+            adapter = new TimeTableAdapter();
+            binding.recyclerView.setAdapter(adapter);
 
-        // Observe the timetable data
-        timeTableViewModel.getTimeTableList().observe(getViewLifecycleOwner(), timeTables -> {
-            if (timeTables != null) {
-                adapter.setTimeTableList(timeTables);
-            }
-        });
+            // Observe the timetable data
+            timeTableViewModel.getTimeTableList().observe(getViewLifecycleOwner(), timeTables -> {
+                if (timeTables != null) {
+                    adapter.setTimeTableList(timeTables);
+                }
+            });
 
-        // Fetch data from API and populate spinners
-        fetchAndPopulateSpinners();
+            // Fetch data from API and populate spinners
+            fetchAndPopulateSpinners();
 
-        // Set search button click listener
-        binding.searchButton.setOnClickListener(v -> fetchTimeTable());
+            // Set search button click listener
+            binding.searchButton.setOnClickListener(v -> fetchTimeTable());
 
-        // Set reset button click listener
-        binding.resetButton.setOnClickListener(v -> resetFields());
+            // Set reset button click listener
+            binding.resetButton.setOnClickListener(v -> resetFields());
 
-        // Set date picker
-        binding.searchDateEditText.setOnClickListener(v -> showDatePicker());
+            // Set date picker
+            binding.searchDateEditText.setOnClickListener(v -> showDatePicker());
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(getContext(), "An error occurred during initialization: " + e.getMessage(), Toast.LENGTH_LONG).show();
+        }
 
         return root;
     }
@@ -77,65 +81,84 @@ public class TimeTableFragment extends Fragment {
                 });
             } catch (IOException e) {
                 getActivity().runOnUiThread(() ->
-                        Toast.makeText(getContext(), "Failed to fetch data", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(getContext(), "Failed to fetch data: " + e.getMessage(), Toast.LENGTH_LONG).show()
                 );
             }
         }).start();
     }
 
     private void fetchTimeTable() {
-        final String startStation = binding.startStationSpinner.getSelectedItem().toString();
-        final String endStation = binding.endStationSpinner.getSelectedItem().toString();
-        final String date = binding.searchDateEditText.getText().toString();
-
-        // Format the date to YYYY-MM-DD
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-        Calendar calendar = Calendar.getInstance();
         try {
-            calendar.setTime(new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).parse(date));
-            final String formattedDate = sdf.format(calendar.getTime());
+            final String startStation = binding.startStationSpinner.getSelectedItem().toString();
+            final String endStation = binding.endStationSpinner.getSelectedItem().toString();
+            final String date = binding.searchDateEditText.getText().toString();
 
-            TimeTableScraper scraper = new TimeTableScraper();
-            new Thread(() -> {
-                try {
-                    List<TimeTable> timeTableList = scraper.getTimeTable(startStation, endStation, formattedDate);
-                    getActivity().runOnUiThread(() -> timeTableViewModel.setTimeTableList(timeTableList));
-                } catch (IOException e) {
-                    getActivity().runOnUiThread(() ->
-                            Toast.makeText(getContext(), "Failed to fetch timetable", Toast.LENGTH_SHORT).show()
-                    );
-                }
-            }).start();
+            // Format the date to YYYY-MM-DD
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+            Calendar calendar = Calendar.getInstance();
+            try {
+                calendar.setTime(new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).parse(date));
+                final String formattedDate = sdf.format(calendar.getTime());
+
+                TimeTableScraper scraper = new TimeTableScraper();
+                new Thread(() -> {
+                    try {
+                        List<TimeTable> timeTableList = scraper.getTimeTable(startStation, endStation, formattedDate);
+                        getActivity().runOnUiThread(() -> timeTableViewModel.setTimeTableList(timeTableList));
+                    } catch (IOException e) {
+                        getActivity().runOnUiThread(() ->
+                                Toast.makeText(getContext(), "Failed to fetch timetable: " + e.getMessage(), Toast.LENGTH_LONG).show()
+                        );
+                    }
+                }).start();
+            } catch (Exception e) {
+                Toast.makeText(getContext(), "Invalid date format: " + e.getMessage(), Toast.LENGTH_LONG).show();
+            }
         } catch (Exception e) {
-            Toast.makeText(getContext(), "Invalid date format", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "An error occurred while fetching timetable: " + e.getMessage(), Toast.LENGTH_LONG).show();
         }
     }
 
     private void resetFields() {
-        binding.startStationSpinner.setSelection(0);
-        binding.endStationSpinner.setSelection(0);
-        binding.searchDateEditText.setText("");
-        timeTableViewModel.setTimeTableList(null);
+        try {
+            binding.startStationSpinner.setSelection(0);
+            binding.endStationSpinner.setSelection(0);
+            binding.searchDateEditText.setText("");
+            timeTableViewModel.setTimeTableList(null);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(getContext(), "An error occurred while resetting fields: " + e.getMessage(), Toast.LENGTH_LONG).show();
+        }
     }
 
     private void populateSpinner(Spinner spinner, List<String> items) {
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, items);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adapter);
+        try {
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, items);
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            spinner.setAdapter(adapter);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(getContext(), "An error occurred while populating spinner: " + e.getMessage(), Toast.LENGTH_LONG).show();
+        }
     }
 
     private void showDatePicker() {
-        final Calendar calendar = Calendar.getInstance();
-        int year = calendar.get(Calendar.YEAR);
-        int month = calendar.get(Calendar.MONTH);
-        int day = calendar.get(Calendar.DAY_OF_MONTH);
+        try {
+            final Calendar calendar = Calendar.getInstance();
+            int year = calendar.get(Calendar.YEAR);
+            int month = calendar.get(Calendar.MONTH);
+            int day = calendar.get(Calendar.DAY_OF_MONTH);
 
-        DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(),
-                (view, year1, monthOfYear, dayOfMonth) -> {
-                    String selectedDate = dayOfMonth + "/" + (monthOfYear + 1) + "/" + year1;
-                    binding.searchDateEditText.setText(selectedDate);
-                }, year, month, day);
-        datePickerDialog.show();
+            DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(),
+                    (view, year1, monthOfYear, dayOfMonth) -> {
+                        String selectedDate = dayOfMonth + "/" + (monthOfYear + 1) + "/" + year1;
+                        binding.searchDateEditText.setText(selectedDate);
+                    }, year, month, day);
+            datePickerDialog.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(getContext(), "An error occurred while showing date picker: " + e.getMessage(), Toast.LENGTH_LONG).show();
+        }
     }
 
     @Override

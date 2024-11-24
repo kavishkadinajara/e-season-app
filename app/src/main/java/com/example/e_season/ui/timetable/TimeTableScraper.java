@@ -16,42 +16,57 @@ public class TimeTableScraper {
 
     public List<String> getStartStations() throws IOException {
         List<String> startStations = new ArrayList<>();
-        Document doc = Jsoup.connect(STATIONS_URL).get();
-        Elements elements = doc.select("select#startStation option");
-        for (Element element : elements) {
-            String station = element.text();
-            if (!station.isEmpty()) {
-                startStations.add(station);
+        try {
+            Document doc = Jsoup.connect(STATIONS_URL).get();
+            Elements elements = doc.select("select#startStation option");
+            for (Element element : elements) {
+                String station = element.text();
+                if (!station.isEmpty()) {
+                    startStations.add(station);
+                }
             }
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw e;
         }
         return startStations;
     }
 
     public List<String> getEndStations() throws IOException {
         List<String> endStations = new ArrayList<>();
-        Document doc = Jsoup.connect(STATIONS_URL).get();
-        Elements elements = doc.select("select#endStation option");
-        for (Element element : elements) {
-            String station = element.text();
-            if (!station.isEmpty()) {
-                endStations.add(station);
+        try {
+            Document doc = Jsoup.connect(STATIONS_URL).get();
+            Elements elements = doc.select("select#endStation option");
+            for (Element element : elements) {
+                String station = element.text();
+                if (!station.isEmpty()) {
+                    endStations.add(station);
+                }
             }
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw e;
         }
         return endStations;
     }
 
     public List<TimeTable> getTimeTable(String startStation, String endStation, String date) throws IOException {
         List<TimeTable> timeTableList = new ArrayList<>();
-        String formattedStartStation = formatStationName(startStation);
-        String formattedEndStation = formatStationName(endStation);
-        String url = BASE_URL + "/achakaa/" + formattedStartStation + "-to-" + formattedEndStation + "-train-timetable?searchDate=" + date;
-        Document doc = Jsoup.connect(url).get();
+        try {
+            String formattedStartStation = formatStationName(startStation);
+            String formattedEndStation = formatStationName(endStation);
+            String url = BASE_URL + "/achakaa/" + formattedStartStation + "-to-" + formattedEndStation + "-train-timetable?searchDate=" + date;
+            Document doc = Jsoup.connect(url).get();
 
-        Elements rows = doc.select("table#trainSchedule tbody tr");
-        for (Element row : rows) {
-            String startTime = row.select("td.startTime").text();
-            String endTime = row.select("td.endTime").text();
-            timeTableList.add(new TimeTable(startStation, endStation, startTime, endTime));
+            Elements rows = doc.select("table#trainSchedule tbody tr");
+            for (Element row : rows) {
+                String startTime = row.select("td.startTime").text();
+                String endTime = row.select("td.endTime").text();
+                timeTableList.add(new TimeTable(startStation, endStation, startTime, endTime));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw e;
         }
         return timeTableList;
     }
