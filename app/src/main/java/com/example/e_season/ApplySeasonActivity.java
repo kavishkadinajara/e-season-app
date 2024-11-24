@@ -1,6 +1,7 @@
 package com.example.e_season;
 
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -9,7 +10,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -146,7 +146,7 @@ public class ApplySeasonActivity extends AppCompatActivity {
             });
         } catch (Exception e) {
             Log.e(TAG, "Exception in onCreate", e);
-            Toast.makeText(this, "An error occurred during initialization", Toast.LENGTH_SHORT).show();
+            showError(e.getMessage());
         }
     }
 
@@ -162,9 +162,7 @@ public class ApplySeasonActivity extends AppCompatActivity {
                 });
             } catch (IOException e) {
                 Log.e(TAG, "Failed to fetch stations", e);
-                runOnUiThread(() ->
-                        Toast.makeText(ApplySeasonActivity.this, "Failed to fetch data", Toast.LENGTH_SHORT).show()
-                );
+                runOnUiThread(() -> showError("Failed to fetch data: " + e.getMessage()));
             }
         }).start();
     }
@@ -189,7 +187,7 @@ public class ApplySeasonActivity extends AppCompatActivity {
             spinner.setAdapter(adapter);
         } catch (Exception e) {
             Log.e(TAG, "Exception in populateSpinner", e);
-            Toast.makeText(this, "An error occurred while populating spinner", Toast.LENGTH_SHORT).show();
+            showError("An error occurred while populating spinner: " + e.getMessage());
         }
     }
 
@@ -203,7 +201,7 @@ public class ApplySeasonActivity extends AppCompatActivity {
             populateSpinner(classSpinner, classes);
         } catch (Exception e) {
             Log.e(TAG, "Exception in populateClassSpinner", e);
-            Toast.makeText(this, "An error occurred while populating class spinner", Toast.LENGTH_SHORT).show();
+            showError("An error occurred while populating class spinner: " + e.getMessage());
         }
     }
 
@@ -222,7 +220,7 @@ public class ApplySeasonActivity extends AppCompatActivity {
             datePickerDialog.show();
         } catch (Exception e) {
             Log.e(TAG, "Exception in showDatePickerDialog", e);
-            Toast.makeText(this, "An error occurred while showing date picker", Toast.LENGTH_SHORT).show();
+            showError("An error occurred while showing date picker: " + e.getMessage());
         }
     }
 
@@ -269,7 +267,7 @@ public class ApplySeasonActivity extends AppCompatActivity {
             }
         } catch (Exception e) {
             Log.e(TAG, "Exception in updateSeasonPrice", e);
-            Toast.makeText(this, "An error occurred while updating season price", Toast.LENGTH_SHORT).show();
+            showError("An error occurred while updating season price: " + e.getMessage());
         }
     }
 
@@ -283,7 +281,7 @@ public class ApplySeasonActivity extends AppCompatActivity {
             String seasonPrice = seasonPriceTextView.getText().toString();
 
             if (seasonStartDate.isEmpty() || seasonEndDate.isEmpty()) {
-                Toast.makeText(this, "Please select both start and end dates", Toast.LENGTH_SHORT).show();
+                showError("Please select both start and end dates");
                 return;
             }
 
@@ -291,58 +289,36 @@ public class ApplySeasonActivity extends AppCompatActivity {
             if (currentUser != null) {
                 String userEmail = currentUser.getEmail();
 
-                // Create a new season entry
-                String seasonId = databaseReference.push().getKey();
-                if (seasonId == null) {
-                    Toast.makeText(this, "Failed to generate season ID", Toast.LENGTH_SHORT).show();
-                    Log.e(TAG, "Failed to generate season ID");
-                    return;
-                }
+                // Log the data being passed to PaymentActivity
+                Log.d(TAG, "Start Station: " + startStation);
+                Log.d(TAG, "End Station: " + endStation);
+                Log.d(TAG, "Season Start Date: " + seasonStartDate);
+                Log.d(TAG, "Season End Date: " + seasonEndDate);
+                Log.d(TAG, "Selected Class: " + selectedClass);
+                Log.d(TAG, "Season Price: " + seasonPrice);
+                Log.d(TAG, "User Email: " + userEmail);
 
-                Season season = new Season(startStation, endStation, seasonStartDate, seasonEndDate, selectedClass, userEmail, seasonPrice);
-
-                // Save the season entry to Firebase
-                databaseReference.child(seasonId).setValue(season)
-                        .addOnSuccessListener(aVoid -> {
-                            Toast.makeText(this, "Season applied successfully", Toast.LENGTH_SHORT).show();
-                            Log.d(TAG, "Season applied successfully");
-                        })
-                        .addOnFailureListener(e -> {
-                            Toast.makeText(this, "Failed to apply season", Toast.LENGTH_SHORT).show();
-                            Log.e(TAG, "Failed to apply season", e);
-                        });
+                // Start PaymentActivity and pass the season data
+                Intent intent = new Intent(ApplySeasonActivity.this, PaymentActivity.class);
+                intent.putExtra("startStation", startStation);
+                intent.putExtra("endStation", endStation);
+                intent.putExtra("seasonStartDate", seasonStartDate);
+                intent.putExtra("seasonEndDate", seasonEndDate);
+                intent.putExtra("selectedClass", selectedClass);
+                intent.putExtra("seasonPrice", seasonPrice);
+                intent.putExtra("userEmail", userEmail);
+                startActivity(intent);
             } else {
-                Toast.makeText(this, "User not logged in", Toast.LENGTH_SHORT).show();
+                showError("User not logged in");
                 Log.e(TAG, "User not logged in");
             }
         } catch (Exception e) {
             Log.e(TAG, "Exception in handleApplySeason", e);
-            Toast.makeText(this, "An error occurred while applying season", Toast.LENGTH_SHORT).show();
+            showError("An error occurred while applying season: " + e.getMessage());
         }
     }
 
-    // Season class to represent the data structure
-    public static class Season {
-        public String startStation;
-        public String endStation;
-        public String seasonStartDate;
-        public String seasonEndDate;
-        public String selectedClass;
-        public String userEmail;
-        public String seasonPrice;
-
-        public Season() {
-            // Default constructor required for calls to DataSnapshot.getValue(Season.class)
-        }
-
-        public Season(String startStation, String endStation, String seasonStartDate, String seasonEndDate, String selectedClass, String userEmail, String seasonPrice) {
-            this.startStation = startStation;
-            this.endStation = endStation;
-            this.seasonStartDate = seasonStartDate;
-            this.seasonEndDate = seasonEndDate;
-            this.selectedClass = selectedClass;
-            this.userEmail = userEmail;
-            this.seasonPrice = seasonPrice;
-        }
+    private void showError(String errorMessage) {
+        Toast.makeText(this, errorMessage, Toast.LENGTH_LONG).show();
     }
 }

@@ -40,6 +40,8 @@
             android:exported="true"/>
         <activity
             android:name=".ApplySeasonActivity" />
+        <activity
+            android:name=".PaymentActivity" />
     </application>
 
 </manifest>

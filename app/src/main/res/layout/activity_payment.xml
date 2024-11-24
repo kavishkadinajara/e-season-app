@@ -1,6 +1,106 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    tools:context=".PaymentActivity">
+
+    <!-- Railway Department Account Details Label -->
+    <TextView
+        android:id="@+id/railwayDeptAccDetailsLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Railway Department Account Details"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginHorizontal="16dp" />
+
+    <!-- Dummy Account Details Label -->
+    <TextView
+        android:id="@+id/dummyAccDetailsLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Account Name: Railway Department\nAccount Number: 123456789\nBank: XYZ Bank\nBranch: Main Branch"
+        android:textSize="16sp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@id/railwayDeptAccDetailsLabel"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginHorizontal="16dp" />
+
+    <!-- Slip Number Label -->
+    <TextView
+        android:id="@+id/slipNumberLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Slip Number"
+        android:textSize="16sp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toBottomOf="@id/dummyAccDetailsLabel"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginHorizontal="16dp" />
+
+    <!-- Slip Number Input -->
+    <EditText
+        android:id="@+id/slipNumberInput"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Enter Slip Number"
+        android:layout_marginTop="8dp"
+        android:padding="12dp"
+        android:background="@drawable/rounded_edittext"
+        app:layout_constraintTop_toBottomOf="@id/slipNumberLabel"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginHorizontal="16dp" />
+
+    <!-- Payment Date Label -->
+    <TextView
+        android:id="@+id/paymentDateLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Payment Date"
+        android:textSize="16sp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toBottomOf="@id/slipNumberInput"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginHorizontal="16dp" />
+
+    <!-- Payment Date Picker -->
+    <EditText
+        android:id="@+id/paymentDateInput"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Select Payment Date"
+        android:layout_marginTop="8dp"
+        android:padding="12dp"
+        android:background="@drawable/rounded_edittext"
+        android:focusable="false"
+        app:layout_constraintTop_toBottomOf="@id/paymentDateLabel"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginHorizontal="16dp" />
+
+    <!-- Submit Payment Button -->
+    <Button
+        android:id="@+id/submitPaymentButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Submit Payment"
+        android:layout_marginTop="24dp"
+        android:backgroundTint="@color/primary"
+        android:textColor="@color/white"
+        android:textAllCaps="false"
+        android:elevation="4dp"
+        app:layout_constraintTop_toBottomOf="@id/paymentDateInput"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginHorizontal="16dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
