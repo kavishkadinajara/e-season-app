@@ -31,8 +31,9 @@ public class ProfileFragment extends Fragment {
     private static final String TAG = "ProfileFragment";
 
     private EditText editFullName, editAddress, editTelephone, editEmail;
-    private Button updateProfileButton, changePasswordButton, editProfileButton, logoutButton;
-    private DatabaseReference databaseReference;
+    private Button updateProfileButton, changePasswordButton, editProfileButton, logoutButton, removeProfileButton;
+    private DatabaseReference userDatabaseReference;
+    private DatabaseReference seasonsDatabaseReference;
     private FirebaseAuth firebaseAuth;
     private FirebaseUser currentUser;
 
@@ -52,6 +53,7 @@ public class ProfileFragment extends Fragment {
         changePasswordButton = root.findViewById(R.id.changePasswordButton);
         editProfileButton = root.findViewById(R.id.editProfileButton);
         logoutButton = root.findViewById(R.id.logoutButton);
+        removeProfileButton = root.findViewById(R.id.removeProfileButton);
 
         if (currentUser != null) {
             String userId = currentUser.getUid();
@@ -60,7 +62,8 @@ public class ProfileFragment extends Fragment {
             Log.d(TAG, "User ID: " + userId);
             Log.d(TAG, "User Email: " + userEmail);
 
-            databaseReference = FirebaseDatabase.getInstance().getReference("Users").child(userId);
+            userDatabaseReference = FirebaseDatabase.getInstance().getReference("Users").child(userId);
+            seasonsDatabaseReference = FirebaseDatabase.getInstance().getReference("seasons");
             checkAndInitializeUser();
             loadUserProfile();
         }
@@ -69,6 +72,7 @@ public class ProfileFragment extends Fragment {
         changePasswordButton.setOnClickListener(v -> changePassword());
         editProfileButton.setOnClickListener(v -> toggleEditMode(true));
         logoutButton.setOnClickListener(v -> logout());
+        removeProfileButton.setOnClickListener(v -> removeProfile());
 
         // Initially make all fields read-only
         toggleEditMode(false);
@@ -77,7 +81,7 @@ public class ProfileFragment extends Fragment {
     }
 
     private void checkAndInitializeUser() {
-        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+        userDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (!snapshot.exists()) {
@@ -88,7 +92,7 @@ public class ProfileFragment extends Fragment {
                     userProfile.put("address", "");
                     userProfile.put("telephone", "");
 
-                    databaseReference.setValue(userProfile).addOnCompleteListener(task -> {
+                    userDatabaseReference.setValue(userProfile).addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
                             Log.d(TAG, "User initialized successfully in database.");
                             Toast.makeText(getContext(), "User initialized successfully", Toast.LENGTH_SHORT).show();
@@ -111,7 +115,7 @@ public class ProfileFragment extends Fragment {
     }
 
     private void loadUserProfile() {
-        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+        userDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
@@ -152,7 +156,7 @@ public class ProfileFragment extends Fragment {
 
         Log.d(TAG, "Updating profile with: " + updatedFields.toString());
 
-        databaseReference.updateChildren(updatedFields).addOnCompleteListener(task -> {
+        userDatabaseReference.updateChildren(updatedFields).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 Log.d(TAG, "Profile updated successfully.");
                 Toast.makeText(getContext(), "Profile updated successfully", Toast.LENGTH_SHORT).show();
@@ -197,5 +201,56 @@ public class ProfileFragment extends Fragment {
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
         getActivity().finish();
+    }
+
+    private void removeProfile() {
+        if (currentUser != null) {
+            String userId = currentUser.getUid();
+            String userEmail = currentUser.getEmail();
+
+            // Remove user profile
+            userDatabaseReference.removeValue().addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    Log.d(TAG, "Profile removed successfully.");
+                    Toast.makeText(getContext(), "Profile removed successfully", Toast.LENGTH_SHORT).show();
+
+                    // Remove related seasons
+                    seasonsDatabaseReference.orderByChild("userEmail").equalTo(userEmail).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            for (DataSnapshot seasonSnapshot : snapshot.getChildren()) {
+                                seasonSnapshot.getRef().removeValue();
+                            }
+                            Log.d(TAG, "Related seasons removed successfully.");
+                            Toast.makeText(getContext(), "Related seasons removed successfully", Toast.LENGTH_SHORT).show();
+
+                            // Delete the Firebase Authentication user
+                            currentUser.delete().addOnCompleteListener(task -> {
+                                if (task.isSuccessful()) {
+                                    Log.d(TAG, "User account deleted.");
+                                    Toast.makeText(getContext(), "User account deleted", Toast.LENGTH_SHORT).show();
+                                    logout(); // Log out the user after removing the profile and related seasons
+                                } else {
+                                    Log.e(TAG, "Failed to delete user account.");
+                                    Toast.makeText(getContext(), "Failed to delete user account", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+                            Log.e(TAG, "Failed to remove related seasons: " + error.getMessage());
+                            Toast.makeText(getContext(), "Failed to remove related seasons", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                } else {
+                    Log.e(TAG, "Failed to remove profile.");
+                    Toast.makeText(getContext(), "Failed to remove profile", Toast.LENGTH_SHORT).show();
+                }
+            });
+        } else {
+            Log.e(TAG, "Error: Unable to fetch user.");
+            Toast.makeText(getContext(), "Error: Unable to fetch user", Toast.LENGTH_SHORT).show();
+        }
     }
 }
