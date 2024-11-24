@@ -1,6 +1,7 @@
 package com.example.e_season;
 
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
@@ -114,7 +115,7 @@ public class PaymentActivity extends AppCompatActivity {
             databaseReference.push().setValue(seasonData).addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
                     Toast.makeText(this, "Season applied and payment submitted successfully", Toast.LENGTH_SHORT).show();
-                    finish(); // Close the activity
+                    navigateToHomePage(); // Navigate to the home page
                 } else {
                     Toast.makeText(this, "Failed to submit payment", Toast.LENGTH_SHORT).show();
                 }
@@ -122,6 +123,18 @@ public class PaymentActivity extends AppCompatActivity {
         } catch (Exception e) {
             Log.e(TAG, "Exception in submitPayment", e);
             Toast.makeText(this, "An error occurred while submitting payment: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void navigateToHomePage() {
+        try {
+            // Navigate to MainActivity or HomeActivity
+            Intent intent = new Intent(PaymentActivity.this, HomeActivity.class);
+            startActivity(intent);
+            finish(); // Close the current activity
+        } catch (Exception e) {
+            Log.e(TAG, "Exception in navigateToHomePage", e);
+            Toast.makeText(this, "An error occurred while navigating to the home page: " + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
 }

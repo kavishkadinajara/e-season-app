@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -7,157 +7,162 @@
     tools:context=".ApplySeasonActivity"
     android:background="@color/background_color">
 
-    <!-- Title -->
-    <TextView
-        android:id="@+id/title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Apply Season"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        android:textColor="@color/title_color"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="16dp"
-        android:textAlignment="center" />
-
-    <!-- Start Station Label -->
-    <TextView
-        android:id="@+id/startStationLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Start Station"
-        android:textSize="16sp"
-        android:textColor="@color/label_color"
-        android:layout_below="@id/title"
-        android:layout_marginTop="16dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp" />
-
-    <!-- Start Station Dropdown -->
-    <Spinner
-        android:id="@+id/startStationSpinner"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/startStationLabel"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/spinner_background"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp" />
+        android:layout_height="wrap_content">
 
-    <!-- End Station Label -->
-    <TextView
-        android:id="@+id/endStationLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="End Station"
-        android:textSize="16sp"
-        android:textColor="@color/label_color"
-        android:layout_below="@id/startStationSpinner"
-        android:layout_marginTop="16dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp" />
+        <!-- Title -->
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Apply Season"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:textColor="@color/title_color"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="16dp"
+            android:textAlignment="center" />
 
-    <!-- End Station Dropdown -->
-    <Spinner
-        android:id="@+id/endStationSpinner"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/endStationLabel"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/spinner_background"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp" />
+        <!-- Start Station Label -->
+        <TextView
+            android:id="@+id/startStationLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Start Station"
+            android:textSize="16sp"
+            android:textColor="@color/label_color"
+            android:layout_below="@id/title"
+            android:layout_marginTop="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp" />
 
-    <!-- Season Start Date Field -->
-    <EditText
-        android:id="@+id/seasonStartDateEditText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/endStationSpinner"
-        android:layout_marginTop="16dp"
-        android:hint="Season Start Date"
-        android:focusable="false"
-        android:background="@drawable/edit_text_background"
-        android:drawableEnd="@drawable/ic_calendar"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp" />
+        <!-- Start Station Dropdown -->
+        <Spinner
+            android:id="@+id/startStationSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/startStationLabel"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/spinner_background"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp" />
 
-    <!-- Season End Date Field -->
-    <EditText
-        android:id="@+id/seasonEndDateEditText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/seasonStartDateEditText"
-        android:layout_marginTop="16dp"
-        android:hint="Season End Date"
-        android:focusable="false"
-        android:background="@drawable/edit_text_background"
-        android:drawableEnd="@drawable/ic_calendar"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp" />
+        <!-- End Station Label -->
+        <TextView
+            android:id="@+id/endStationLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="End Station"
+            android:textSize="16sp"
+            android:textColor="@color/label_color"
+            android:layout_below="@id/startStationSpinner"
+            android:layout_marginTop="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp" />
 
-    <!-- Class Label -->
-    <TextView
-        android:id="@+id/classLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Class"
-        android:textSize="16sp"
-        android:textColor="@color/label_color"
-        android:layout_below="@id/seasonEndDateEditText"
-        android:layout_marginTop="16dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp" />
+        <!-- End Station Dropdown -->
+        <Spinner
+            android:id="@+id/endStationSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/endStationLabel"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/spinner_background"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp" />
 
-    <!-- Class Dropdown -->
-    <Spinner
-        android:id="@+id/classSpinner"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/classLabel"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/spinner_background"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp" />
+        <!-- Season Start Date Field -->
+        <EditText
+            android:id="@+id/seasonStartDateEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/endStationSpinner"
+            android:layout_marginTop="16dp"
+            android:hint="Season Start Date"
+            android:focusable="false"
+            android:background="@drawable/edit_text_background"
+            android:drawableEnd="@drawable/ic_calendar"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp" />
 
-    <!-- Season Price Label -->
-    <TextView
-        android:id="@+id/seasonPriceLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Season Price"
-        android:textSize="16sp"
-        android:textColor="@color/label_color"
-        android:layout_below="@id/classSpinner"
-        android:layout_marginTop="16dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp" />
+        <!-- Season End Date Field -->
+        <EditText
+            android:id="@+id/seasonEndDateEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/seasonStartDateEditText"
+            android:layout_marginTop="16dp"
+            android:hint="Season End Date"
+            android:focusable="false"
+            android:background="@drawable/edit_text_background"
+            android:drawableEnd="@drawable/ic_calendar"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp" />
 
-    <!-- Season Price TextView -->
-    <TextView
-        android:id="@+id/seasonPriceTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="LKR 0"
-        android:textSize="16sp"
-        android:textColor="@color/price_color"
-        android:layout_below="@id/seasonPriceLabel"
-        android:layout_marginTop="8dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp" />
+        <!-- Class Label -->
+        <TextView
+            android:id="@+id/classLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Class"
+            android:textSize="16sp"
+            android:textColor="@color/label_color"
+            android:layout_below="@id/seasonEndDateEditText"
+            android:layout_marginTop="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp" />
 
-    <!-- Apply Season Button -->
-    <Button
-        android:id="@+id/applySeasonButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/seasonPriceTextView"
-        android:layout_marginTop="16dp"
-        android:text="Apply Season"
-        android:backgroundTint="@color/button_color"
-        android:textColor="@android:color/white"
-        android:background="@drawable/button_background"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp" />
+        <!-- Class Dropdown -->
+        <Spinner
+            android:id="@+id/classSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/classLabel"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/spinner_background"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp" />
 
-</RelativeLayout>
+        <!-- Season Price Label -->
+        <TextView
+            android:id="@+id/seasonPriceLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Season Price"
+            android:textSize="16sp"
+            android:textColor="@color/label_color"
+            android:layout_below="@id/classSpinner"
+            android:layout_marginTop="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp" />
+
+        <!-- Season Price TextView -->
+        <TextView
+            android:id="@+id/seasonPriceTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="LKR 0"
+            android:textSize="16sp"
+            android:textColor="@color/price_color"
+            android:layout_below="@id/seasonPriceLabel"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp" />
+
+        <!-- Apply Season Button -->
+        <Button
+            android:id="@+id/applySeasonButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/seasonPriceTextView"
+            android:layout_marginTop="16dp"
+            android:text="Apply Season"
+            android:backgroundTint="@color/button_color"
+            android:textColor="@android:color/white"
+            android:background="@drawable/button_background"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp" />
+
+    </RelativeLayout>
+</ScrollView>

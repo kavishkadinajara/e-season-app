@@ -1,131 +1,137 @@
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp"
-    android:paddingTop="50pt"
+    android:padding="0dp"
     tools:context=".RegisterActivity">
 
-    <!-- Title -->
-    <TextView
-    android:id="@+id/registerTitle"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginBottom="24dp"
-    android:gravity="center"
-    android:text="Register"
-    android:textColor="#2196F3"
-    android:textSize="35sp"
-    android:textStyle="bold" />
-
-    <!-- Full Name Field -->
-    <EditText
-    android:id="@+id/fullNameEditText"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="8dp"
-    android:layout_marginBottom="16dp"
-    android:background="@drawable/edit_text_background"
-    android:drawableStart="@drawable/ic_user"
-    android:drawablePadding="10dp"
-    android:hint="Full Name"
-    android:inputType="textPersonName"
-    android:padding="12dp"
-    android:textSize="20dp"
-    android:textColor="#000000" />
-
-    <!-- Email Field -->
-    <EditText
-    android:id="@+id/emailEditText"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="8dp"
-    android:layout_marginBottom="16dp"
-    android:background="@drawable/edit_text_background"
-    android:drawableStart="@drawable/ic_email"
-    android:drawablePadding="10dp"
-    android:hint="Email"
-    android:inputType="textEmailAddress"
-    android:padding="12dp"
-    android:textSize="20dp"
-    android:textColor="#000000" />
-
-    <!-- Create Password Field -->
-    <EditText
-    android:id="@+id/createPasswordEditText"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="8dp"
-    android:layout_marginBottom="16dp"
-    android:background="@drawable/edit_text_background"
-    android:drawableStart="@drawable/ic_lock"
-    android:drawablePadding="10dp"
-    android:hint="Create Password"
-    android:inputType="textPassword"
-    android:padding="12dp"
-    android:textSize="20dp"
-    android:textColor="#000000" />
-
-    <!-- Confirm Password Field -->
-    <EditText
-    android:id="@+id/confirmPasswordEditText"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="8dp"
-    android:layout_marginBottom="32dp"
-    android:background="@drawable/edit_text_background"
-    android:drawableStart="@drawable/ic_lock"
-    android:drawablePadding="10dp"
-    android:hint="Confirm Password"
-    android:inputType="textPassword"
-    android:padding="12dp"
-    android:textSize="20dp"
-    android:textColor="#000000" />
-
-    <!-- Register Button -->
-    <Button
-    android:id="@+id/registerButton"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="8dp"
-    android:layout_marginBottom="16dp"
-    android:backgroundTint="#2196F3"
-    android:padding="12dp"
-    android:clipToOutline="true"
-    android:text="Register"
-    android:textColor="#FFFFFF"
-    android:textSize="18sp"
-    android:layout_marginStart="16dp"
-    android:layout_marginEnd="16dp" />
-
-    <!-- Google Login Button with Logo -->
     <LinearLayout
-    android:id="@+id/googleLoginContainer"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="20dp"
-    android:layout_marginStart="16dp"
-    android:layout_marginEnd="16dp"
-    android:background="@drawable/google_button_background"
-    android:orientation="horizontal"
-    android:gravity="center"
-    android:padding="12dp">
-
-    <ImageView
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:src="@drawable/google_logo"
-        android:contentDescription="Google Logo" />
-
-    <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:text="Register with Google"
-        android:textColor="#4285F4"
-        android:textSize="18sp"/>
-    </LinearLayout>
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:paddingTop="50dp">
 
-</LinearLayout>
+        <!-- Title -->
+        <TextView
+            android:id="@+id/registerTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            android:gravity="center"
+            android:text="Register"
+            android:textColor="#2196F3"
+            android:textSize="35sp"
+            android:textStyle="bold" />
+
+        <!-- Full Name Field -->
+        <EditText
+            android:id="@+id/fullNameEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/edit_text_background"
+            android:drawableStart="@drawable/ic_user"
+            android:drawablePadding="10dp"
+            android:hint="Full Name"
+            android:inputType="textPersonName"
+            android:padding="12dp"
+            android:textSize="20dp"
+            android:textColor="#000000" />
+
+        <!-- Email Field -->
+        <EditText
+            android:id="@+id/emailEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/edit_text_background"
+            android:drawableStart="@drawable/ic_email"
+            android:drawablePadding="10dp"
+            android:hint="Email"
+            android:inputType="textEmailAddress"
+            android:padding="12dp"
+            android:textSize="20dp"
+            android:textColor="#000000" />
+
+        <!-- Create Password Field -->
+        <EditText
+            android:id="@+id/createPasswordEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/edit_text_background"
+            android:drawableStart="@drawable/ic_lock"
+            android:drawablePadding="10dp"
+            android:hint="Create Password"
+            android:inputType="textPassword"
+            android:padding="12dp"
+            android:textSize="20dp"
+            android:textColor="#000000" />
+
+        <!-- Confirm Password Field -->
+        <EditText
+            android:id="@+id/confirmPasswordEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="32dp"
+            android:background="@drawable/edit_text_background"
+            android:drawableStart="@drawable/ic_lock"
+            android:drawablePadding="10dp"
+            android:hint="Confirm Password"
+            android:inputType="textPassword"
+            android:padding="12dp"
+            android:textSize="20dp"
+            android:textColor="#000000" />
+
+        <!-- Register Button -->
+        <Button
+            android:id="@+id/registerButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="16dp"
+            android:backgroundTint="#2196F3"
+            android:padding="12dp"
+            android:clipToOutline="true"
+            android:text="Register"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp" />
+
+        <!-- Google Login Button with Logo -->
+        <LinearLayout
+            android:id="@+id/googleLoginContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/google_button_background"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:padding="12dp">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/google_logo"
+                android:contentDescription="Google Logo" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="Register with Google"
+                android:textColor="#4285F4"
+                android:textSize="18sp"/>
+        </LinearLayout>
+
+    </LinearLayout>
+</ScrollView>
