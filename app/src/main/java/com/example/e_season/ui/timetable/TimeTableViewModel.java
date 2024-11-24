@@ -4,16 +4,21 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import java.util.List;
+
 public class TimeTableViewModel extends ViewModel {
 
-    private final MutableLiveData<String> mText;
+    private final MutableLiveData<List<TimeTable>> timeTableList;
 
     public TimeTableViewModel() {
-        mText = new MutableLiveData<>();
-        mText.setValue("This is the timetable fragment");
+        timeTableList = new MutableLiveData<>();
     }
 
-    public LiveData<String> getText() {
-        return mText;
+    public LiveData<List<TimeTable>> getTimeTableList() {
+        return timeTableList;
+    }
+
+    public void setTimeTableList(List<TimeTable> timeTableList) {
+        this.timeTableList.setValue(timeTableList);
     }
 }

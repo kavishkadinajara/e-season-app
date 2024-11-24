@@ -3,46 +3,42 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="8dp">
+    android:padding="16dp">
 
     <TextView
         android:id="@+id/startStationTextView"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="Start Station"
         android:textSize="16sp"
-        android:textColor="@android:color/black"
-        android:text="Start Station" />
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/endStationTextView"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="End Station"
         android:textSize="16sp"
-        android:textColor="@android:color/black"
-        android:text="End Station" />
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/seasonStartDateTextView"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="16sp"
-        android:textColor="@android:color/black"
-        android:text="Season Start Date" />
+        android:text="Season Start Date"
+        android:textSize="14sp" />
 
     <TextView
         android:id="@+id/seasonEndDateTextView"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="16sp"
-        android:textColor="@android:color/black"
-        android:text="Season End Date" />
+        android:text="Season End Date"
+        android:textSize="14sp" />
 
     <TextView
         android:id="@+id/classTextView"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="16sp"
-        android:textColor="@android:color/black"
-        android:text="Class" />
-
+        android:text="Class"
+        android:textSize="14sp" />
 </LinearLayout>

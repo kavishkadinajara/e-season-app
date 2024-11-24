@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp"
-    tools:context=".ui.applyseason.ApplySeasonActivity"
+    tools:context=".ApplySeasonActivity"
     android:background="@color/background_color">
 
     <!-- Title -->
@@ -20,14 +20,40 @@
         android:layout_marginTop="16dp"
         android:textAlignment="center" />
 
+    <!-- Start Station Label -->
+    <TextView
+        android:id="@+id/startStationLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Start Station"
+        android:textSize="16sp"
+        android:textColor="@color/label_color"
+        android:layout_below="@id/title"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp" />
+
     <!-- Start Station Dropdown -->
     <Spinner
         android:id="@+id/startStationSpinner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/title"
-        android:layout_marginTop="16dp"
+        android:layout_below="@id/startStationLabel"
+        android:layout_marginTop="8dp"
         android:background="@drawable/spinner_background"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp" />
+
+    <!-- End Station Label -->
+    <TextView
+        android:id="@+id/endStationLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="End Station"
+        android:textSize="16sp"
+        android:textColor="@color/label_color"
+        android:layout_below="@id/startStationSpinner"
+        android:layout_marginTop="16dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp" />
 
@@ -36,8 +62,8 @@
         android:id="@+id/endStationSpinner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/startStationSpinner"
-        android:layout_marginTop="16dp"
+        android:layout_below="@id/endStationLabel"
+        android:layout_marginTop="8dp"
         android:background="@drawable/spinner_background"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp" />
@@ -70,13 +96,26 @@
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp" />
 
+    <!-- Class Label -->
+    <TextView
+        android:id="@+id/classLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Class"
+        android:textSize="16sp"
+        android:textColor="@color/label_color"
+        android:layout_below="@id/seasonEndDateEditText"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp" />
+
     <!-- Class Dropdown -->
     <Spinner
         android:id="@+id/classSpinner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/seasonEndDateEditText"
-        android:layout_marginTop="16dp"
+        android:layout_below="@id/classLabel"
+        android:layout_marginTop="8dp"
         android:background="@drawable/spinner_background"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp" />

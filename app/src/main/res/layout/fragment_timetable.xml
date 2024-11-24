@@ -77,60 +77,6 @@
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp" />
 
-    <!-- Start Time Label -->
-    <TextView
-        android:id="@+id/startTimeLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Start Time"
-        android:textSize="16sp"
-        android:textColor="@color/label_color"
-        app:layout_constraintTop_toBottomOf="@id/endStationSpinner"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="16dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp" />
-
-    <!-- Start Time Dropdown -->
-    <Spinner
-        android:id="@+id/startTimeSpinner"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:background="@drawable/spinner_background"
-        app:layout_constraintTop_toBottomOf="@id/startTimeLabel"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp" />
-
-    <!-- End Time Label -->
-    <TextView
-        android:id="@+id/endTimeLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="End Time"
-        android:textSize="16sp"
-        android:textColor="@color/label_color"
-        app:layout_constraintTop_toBottomOf="@id/startTimeSpinner"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="16dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp" />
-
-    <!-- End Time Dropdown -->
-    <Spinner
-        android:id="@+id/endTimeSpinner"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:background="@drawable/spinner_background"
-        app:layout_constraintTop_toBottomOf="@id/endTimeLabel"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp" />
-
     <!-- Search Date Label -->
     <TextView
         android:id="@+id/searchDateLabel"
@@ -139,7 +85,7 @@
         android:text="Search Date"
         android:textSize="16sp"
         android:textColor="@color/label_color"
-        app:layout_constraintTop_toBottomOf="@id/endTimeSpinner"
+        app:layout_constraintTop_toBottomOf="@id/endStationSpinner"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="16dp"

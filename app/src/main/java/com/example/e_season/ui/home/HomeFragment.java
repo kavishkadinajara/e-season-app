@@ -1,20 +1,17 @@
 package com.example.e_season.ui.home;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.Toast;
-import android.widget.TextView;
-
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.e_season.R;
+import com.example.e_season.ApplySeasonActivity;
 import com.example.e_season.databinding.FragmentHomeBinding;
 
 public class HomeFragment extends Fragment {
@@ -34,42 +31,15 @@ public class HomeFragment extends Fragment {
         homeViewModel.getText().observe(getViewLifecycleOwner(), binding.title::setText);
 
         // Setup click listeners for buttons
-        binding.button1.setOnClickListener(view -> 
-            Toast.makeText(getContext(), "Feature 1 Clicked", Toast.LENGTH_SHORT).show()
-        );
-        binding.button2.setOnClickListener(view -> 
-            Toast.makeText(getContext(), "Feature 2 Clicked", Toast.LENGTH_SHORT).show()
-        );
-        binding.button3.setOnClickListener(view -> 
-            Toast.makeText(getContext(), "Feature 3 Clicked", Toast.LENGTH_SHORT).show()
-        );
+        binding.button1.setOnClickListener(view -> {
+            Intent intent = new Intent(getActivity(), ApplySeasonActivity.class);
+            startActivity(intent);
+        });
 
         // Example use of ImageView
-        binding.homeImage.setOnClickListener(view -> 
-            Toast.makeText(getContext(), "Image Clicked", Toast.LENGTH_SHORT).show()
+        binding.homeImage.setOnClickListener(view ->
+                Toast.makeText(getContext(), "Image Clicked", Toast.LENGTH_SHORT).show()
         );
-
-        final TextView titleTextView = binding.title;
-        final ImageView homeImageView = binding.homeImage;
-        final TextView descriptionTextView = binding.description;
-        final Button button1 = binding.button1;
-        final Button button2 = binding.button2;
-        final Button button3 = binding.button3;
-
-        homeViewModel.getText().observe(getViewLifecycleOwner(), titleTextView::setText);
-
-        // Set up button click listeners
-        button1.setOnClickListener(v -> {
-            // Handle Feature 1 button click
-        });
-
-        button2.setOnClickListener(v -> {
-            // Handle Feature 2 button click
-        });
-
-        button3.setOnClickListener(v -> {
-            // Handle Feature 3 button click
-        });
 
         return root;
     }

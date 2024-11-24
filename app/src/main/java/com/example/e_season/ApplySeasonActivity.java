@@ -2,7 +2,6 @@ package com.example.e_season;
 
 import android.app.DatePickerDialog;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -13,8 +12,17 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.e_season.R;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -28,10 +36,17 @@ public class ApplySeasonActivity extends AppCompatActivity {
     private Spinner classSpinner;
     private Button applySeasonButton;
 
+    private DatabaseReference databaseReference;
+    private FirebaseAuth mAuth;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_apply_season);
+
+        // Initialize Firebase Database and Auth
+        databaseReference = FirebaseDatabase.getInstance().getReference("seasons");
+        mAuth = FirebaseAuth.getInstance();
 
         // Initialize views
         startStationSpinner = findViewById(R.id.startStationSpinner);
@@ -44,6 +59,9 @@ public class ApplySeasonActivity extends AppCompatActivity {
         // Fetch data from API and populate spinners
         fetchAndPopulateSpinners();
 
+        // Populate class spinner
+        populateClassSpinner();
+
         // Set up date pickers
         seasonStartDateEditText.setOnClickListener(v -> showDatePickerDialog(seasonStartDateEditText));
         seasonEndDateEditText.setOnClickListener(v -> showDatePickerDialog(seasonEndDateEditText));
@@ -53,32 +71,49 @@ public class ApplySeasonActivity extends AppCompatActivity {
     }
 
     private void fetchAndPopulateSpinners() {
-        // Simulate fetching data from an API
-        List<String> startStations = new ArrayList<>();
-        startStations.add("Station 1");
-        startStations.add("Station 2");
-        startStations.add("Station 3");
+        new Thread(() -> {
+            try {
+                List<String> startStations = fetchStations("startStation");
+                List<String> endStations = fetchStations("endStation");
 
-        List<String> endStations = new ArrayList<>();
-        endStations.add("Station A");
-        endStations.add("Station B");
-        endStations.add("Station C");
+                runOnUiThread(() -> {
+                    populateSpinner(startStationSpinner, startStations);
+                    populateSpinner(endStationSpinner, endStations);
+                });
+            } catch (IOException e) {
+                runOnUiThread(() ->
+                        Toast.makeText(ApplySeasonActivity.this, "Failed to fetch data", Toast.LENGTH_SHORT).show()
+                );
+            }
+        }).start();
+    }
 
-        List<String> classes = new ArrayList<>();
-        classes.add("First Class");
-        classes.add("Second Class");
-        classes.add("Third Class");
-
-        // Populate spinners
-        populateSpinner(startStationSpinner, startStations);
-        populateSpinner(endStationSpinner, endStations);
-        populateSpinner(classSpinner, classes);
+    private List<String> fetchStations(String stationType) throws IOException {
+        List<String> stations = new ArrayList<>();
+        Document doc = Jsoup.connect("https://eservices.railway.gov.lk/schedule/searchTrain.action?lang=en").get();
+        Elements elements = doc.select("select#" + stationType + " option");
+        for (Element element : elements) {
+            String station = element.text();
+            if (!station.isEmpty()) {
+                stations.add(station);
+            }
+        }
+        return stations;
     }
 
     private void populateSpinner(Spinner spinner, List<String> items) {
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, items);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
+    }
+
+    private void populateClassSpinner() {
+        List<String> classes = new ArrayList<>();
+        classes.add("1st Class");
+        classes.add("2nd Class");
+        classes.add("3rd Class");
+
+        populateSpinner(classSpinner, classes);
     }
 
     private void showDatePickerDialog(final EditText editText) {
@@ -107,9 +142,45 @@ public class ApplySeasonActivity extends AppCompatActivity {
             return;
         }
 
-        // Perform apply season logic here
-        // For example, send the data to the server or save it in the database
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (currentUser != null) {
+            String userEmail = currentUser.getEmail();
 
-        Toast.makeText(this, "Season applied successfully", Toast.LENGTH_SHORT).show();
+            // Create a new season entry
+            String seasonId = databaseReference.push().getKey();
+            Season season = new Season(startStation, endStation, seasonStartDate, seasonEndDate, selectedClass, userEmail);
+
+            // Save the season entry to Firebase
+            if (seasonId != null) {
+                databaseReference.child(seasonId).setValue(season)
+                        .addOnSuccessListener(aVoid -> Toast.makeText(this, "Season applied successfully", Toast.LENGTH_SHORT).show())
+                        .addOnFailureListener(e -> Toast.makeText(this, "Failed to apply season", Toast.LENGTH_SHORT).show());
+            }
+        } else {
+            Toast.makeText(this, "User not logged in", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    // Season class to represent the data structure
+    public static class Season {
+        public String startStation;
+        public String endStation;
+        public String seasonStartDate;
+        public String seasonEndDate;
+        public String selectedClass;
+        public String userEmail;
+
+        public Season() {
+            // Default constructor required for calls to DataSnapshot.getValue(Season.class)
+        }
+
+        public Season(String startStation, String endStation, String seasonStartDate, String seasonEndDate, String selectedClass, String userEmail) {
+            this.startStation = startStation;
+            this.endStation = endStation;
+            this.seasonStartDate = seasonStartDate;
+            this.seasonEndDate = seasonEndDate;
+            this.selectedClass = selectedClass;
+            this.userEmail = userEmail;
+        }
     }
 }
