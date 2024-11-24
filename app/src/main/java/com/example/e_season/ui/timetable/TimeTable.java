@@ -1,31 +1,56 @@
 package com.example.e_season.ui.timetable;
 
 public class TimeTable {
-    private String startStation;
-    private String endStation;
-    private String startTime;
-    private String endTime;
 
-    public TimeTable(String startStation, String endStation, String startTime, String endTime) {
-        this.startStation = startStation;
-        this.endStation = endStation;
-        this.startTime = startTime;
-        this.endTime = endTime;
+    private String yourStation;
+    private String arrivalTime;
+    private String departureTime;
+    private String destinationTime;
+    private String endStationTime;
+    private String frequency;
+    private String name;
+    private String type;
+
+    public TimeTable(String yourStation, String arrivalTime, String departureTime, String destinationTime, String endStationTime, String frequency, String name, String type) {
+        this.yourStation = yourStation;
+        this.arrivalTime = arrivalTime;
+        this.departureTime = departureTime;
+        this.destinationTime = destinationTime;
+        this.endStationTime = endStationTime;
+        this.frequency = frequency;
+        this.name = name;
+        this.type = type;
     }
 
-    public String getStartStation() {
-        return startStation;
+    public String getYourStation() {
+        return yourStation;
     }
 
-    public String getEndStation() {
-        return endStation;
+    public String getArrivalTime() {
+        return arrivalTime;
     }
 
-    public String getStartTime() {
-        return startTime;
+    public String getDepartureTime() {
+        return departureTime;
     }
 
-    public String getEndTime() {
-        return endTime;
+    public String getDestinationTime() {
+        return destinationTime;
+    }
+
+    public String getEndStationTime() {
+        return endStationTime;
+    }
+
+    public String getFrequency() {
+        return frequency;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getType() {
+        return type;
     }
 }

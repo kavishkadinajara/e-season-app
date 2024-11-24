@@ -8,17 +8,17 @@ import java.util.List;
 
 public class TimeTableViewModel extends ViewModel {
 
-    private final MutableLiveData<List<TimeTable>> timeTableList;
+    private final MutableLiveData<List<TimeTable>> timeTables;
 
     public TimeTableViewModel() {
-        timeTableList = new MutableLiveData<>();
+        timeTables = new MutableLiveData<>();
     }
 
-    public LiveData<List<TimeTable>> getTimeTableList() {
-        return timeTableList;
+    public LiveData<List<TimeTable>> getTimeTables() {
+        return timeTables;
     }
 
     public void setTimeTableList(List<TimeTable> timeTableList) {
-        this.timeTableList.setValue(timeTableList);
+        timeTables.setValue(timeTableList);
     }
 }

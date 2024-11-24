@@ -4,7 +4,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -16,7 +15,11 @@ import java.util.List;
 
 public class TimeTableAdapter extends RecyclerView.Adapter<TimeTableAdapter.TimeTableViewHolder> {
 
-    private List<TimeTable> timeTableList = new ArrayList<>();
+    private List<TimeTable> timeTables;
+
+    public TimeTableAdapter(List<TimeTable> timeTables) {
+        this.timeTables = timeTables != null ? timeTables : new ArrayList<>();
+    }
 
     @NonNull
     @Override
@@ -27,41 +30,48 @@ public class TimeTableAdapter extends RecyclerView.Adapter<TimeTableAdapter.Time
 
     @Override
     public void onBindViewHolder(@NonNull TimeTableViewHolder holder, int position) {
-        try {
-            TimeTable timeTable = timeTableList.get(position);
-            holder.startStationTextView.setText(timeTable.getStartStation());
-            holder.endStationTextView.setText(timeTable.getEndStation());
-            holder.startTimeTextView.setText(timeTable.getStartTime());
-            holder.endTimeTextView.setText(timeTable.getEndTime());
-        } catch (Exception e) {
-            e.printStackTrace();
-            Toast.makeText(holder.itemView.getContext(), "An error occurred while binding data: " + e.getMessage(), Toast.LENGTH_LONG).show();
-        }
+        TimeTable timeTable = timeTables.get(position);
+        holder.yourStationTextView.setText(timeTable.getYourStation());
+        holder.arrivalTimeTextView.setText(timeTable.getArrivalTime());
+        holder.departureTimeTextView.setText(timeTable.getDepartureTime());
+        holder.destinationTimeTextView.setText(timeTable.getDestinationTime());
+        holder.endStationTimeTextView.setText(timeTable.getEndStationTime());
+        holder.frequencyTextView.setText(timeTable.getFrequency());
+        holder.nameTextView.setText(timeTable.getName());
+        holder.typeTextView.setText(timeTable.getType());
     }
 
     @Override
     public int getItemCount() {
-        return timeTableList.size();
+        return timeTables.size();
     }
 
-    public void setTimeTableList(List<TimeTable> timeTableList) {
-        this.timeTableList = timeTableList;
+    public void setTimeTableList(List<TimeTable> timeTables) {
+        this.timeTables = timeTables != null ? timeTables : new ArrayList<>();
         notifyDataSetChanged();
     }
 
     static class TimeTableViewHolder extends RecyclerView.ViewHolder {
 
-        TextView startStationTextView;
-        TextView endStationTextView;
-        TextView startTimeTextView;
-        TextView endTimeTextView;
+        TextView yourStationTextView;
+        TextView arrivalTimeTextView;
+        TextView departureTimeTextView;
+        TextView destinationTimeTextView;
+        TextView endStationTimeTextView;
+        TextView frequencyTextView;
+        TextView nameTextView;
+        TextView typeTextView;
 
         public TimeTableViewHolder(@NonNull View itemView) {
             super(itemView);
-            startStationTextView = itemView.findViewById(R.id.startStationTextView);
-            endStationTextView = itemView.findViewById(R.id.endStationTextView);
-            startTimeTextView = itemView.findViewById(R.id.startTimeTextView);
-            endTimeTextView = itemView.findViewById(R.id.endTimeTextView);
+            yourStationTextView = itemView.findViewById(R.id.yourStationTextView);
+            arrivalTimeTextView = itemView.findViewById(R.id.arrivalTimeTextView);
+            departureTimeTextView = itemView.findViewById(R.id.departureTimeTextView);
+            destinationTimeTextView = itemView.findViewById(R.id.destinationTimeTextView);
+            endStationTimeTextView = itemView.findViewById(R.id.endStationTimeTextView);
+            frequencyTextView = itemView.findViewById(R.id.frequencyTextView);
+            nameTextView = itemView.findViewById(R.id.nameTextView);
+            typeTextView = itemView.findViewById(R.id.typeTextView);
         }
     }
 }

@@ -3,35 +3,67 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="16dp"
+    android:background="@drawable/item_background"
+    android:layout_margin="8dp"
+    android:elevation="4dp">
 
     <TextView
-        android:id="@+id/startStationTextView"
-        android:layout_width="wrap_content"
+        android:id="@+id/yourStationTextView"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Start Station"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:textColor="@color/primary_text_color"
+        android:paddingBottom="8dp" />
+
+    <TextView
+        android:id="@+id/arrivalTimeTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:textSize="16sp"
-        android:textStyle="bold" />
+        android:textColor="@color/secondary_text_color" />
 
     <TextView
-        android:id="@+id/endStationTextView"
-        android:layout_width="wrap_content"
+        android:id="@+id/departureTimeTextView"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="End Station"
         android:textSize="16sp"
-        android:textStyle="bold" />
+        android:textColor="@color/secondary_text_color" />
 
     <TextView
-        android:id="@+id/startTimeTextView"
-        android:layout_width="wrap_content"
+        android:id="@+id/destinationTimeTextView"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Start Time"
-        android:textSize="14sp" />
+        android:textSize="16sp"
+        android:textColor="@color/secondary_text_color" />
 
     <TextView
-        android:id="@+id/endTimeTextView"
-        android:layout_width="wrap_content"
+        android:id="@+id/endStationTimeTextView"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="End Time"
-        android:textSize="14sp" />
+        android:textSize="16sp"
+        android:textColor="@color/secondary_text_color" />
+
+    <TextView
+        android:id="@+id/frequencyTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:textColor="@color/secondary_text_color" />
+
+    <TextView
+        android:id="@+id/nameTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:textColor="@color/secondary_text_color" />
+
+    <TextView
+        android:id="@+id/typeTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:textColor="@color/secondary_text_color" />
+
 </LinearLayout>

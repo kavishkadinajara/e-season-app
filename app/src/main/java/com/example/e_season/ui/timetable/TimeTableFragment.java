@@ -14,10 +14,12 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.example.e_season.R;
 import com.example.e_season.databinding.FragmentTimetableBinding;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
@@ -39,11 +41,11 @@ public class TimeTableFragment extends Fragment {
         try {
             // Initialize RecyclerView
             binding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-            adapter = new TimeTableAdapter();
+            adapter = new TimeTableAdapter(new ArrayList<>()); // Pass an empty list initially
             binding.recyclerView.setAdapter(adapter);
 
             // Observe the timetable data
-            timeTableViewModel.getTimeTableList().observe(getViewLifecycleOwner(), timeTables -> {
+            timeTableViewModel.getTimeTables().observe(getViewLifecycleOwner(), timeTables -> {
                 if (timeTables != null) {
                     adapter.setTimeTableList(timeTables);
                 }
