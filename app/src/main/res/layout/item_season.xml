@@ -6,39 +6,18 @@
     android:padding="16dp">
 
     <TextView
-        android:id="@+id/startStationTextView"
-        android:layout_width="wrap_content"
+        android:id="@+id/seasonInfoTextView"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Start Station"
         android:textSize="16sp"
-        android:textStyle="bold" />
+        android:textColor="@color/primary_text_color"
+        android:paddingBottom="8dp" />
 
     <TextView
-        android:id="@+id/endStationTextView"
-        android:layout_width="wrap_content"
+        android:id="@+id/seasonValidityTextView"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="End Station"
-        android:textSize="16sp"
-        android:textStyle="bold" />
+        android:textSize="14sp"
+        android:textColor="@color/secondary_text_color" />
 
-    <TextView
-        android:id="@+id/seasonStartDateTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Season Start Date"
-        android:textSize="14sp" />
-
-    <TextView
-        android:id="@+id/seasonEndDateTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Season End Date"
-        android:textSize="14sp" />
-
-    <TextView
-        android:id="@+id/classTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Class"
-        android:textSize="14sp" />
 </LinearLayout>

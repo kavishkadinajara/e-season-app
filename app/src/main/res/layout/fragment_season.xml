@@ -11,63 +11,23 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <!-- Start Station Spinner -->
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Start Station"
-            android:textSize="16sp"
-            android:paddingBottom="8dp"
-            android:textColor="@color/primary_text_color" />
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingBottom="16dp">
-
-            <Spinner
-                android:id="@+id/start_station_spinner"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/spinner_background" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <!-- End Station Spinner -->
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="End Station"
-            android:textSize="16sp"
-            android:paddingTop="16dp"
-            android:paddingBottom="8dp"
-            android:textColor="@color/primary_text_color" />
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingBottom="16dp">
-
-            <Spinner
-                android:id="@+id/end_station_spinner"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/spinner_background" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <!-- Filter Button -->
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/filterButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Filter"
-            android:layout_marginTop="16dp"
-            style="@style/Widget.MaterialComponents.Button" />
-
         <!-- RecyclerView for Seasons -->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerViewSeasons"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="16dp" />
+
+        <!-- TextView for No Seasons Message -->
+        <TextView
+            android:id="@+id/noSeasonsTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="You do not have any seasons yet."
+            android:textSize="16sp"
+            android:gravity="center"
+            android:visibility="gone"
+            android:textColor="@color/primary_text_color"
             android:layout_marginTop="16dp" />
 
     </LinearLayout>

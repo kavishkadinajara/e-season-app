@@ -1,12 +1,13 @@
 package com.example.e_season.ui.season;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -17,11 +18,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.e_season.databinding.FragmentSeasonBinding;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,9 +29,7 @@ public class SeasonFragment extends Fragment {
     private FragmentSeasonBinding binding;
     private SeasonAdapter seasonAdapter;
     private List<Season> seasonList;
-    private List<String> stationsList = new ArrayList<>();
 
-    private Spinner startStationSpinner, endStationSpinner;
     private DatabaseReference databaseReference;
     private FirebaseAuth mAuth;
 
@@ -53,108 +49,43 @@ public class SeasonFragment extends Fragment {
             binding.recyclerViewSeasons.setLayoutManager(new LinearLayoutManager(getContext()));
             binding.recyclerViewSeasons.setAdapter(seasonAdapter);
 
-            // Initialize Spinners
-            startStationSpinner = binding.startStationSpinner;
-            endStationSpinner = binding.endStationSpinner;
-
-            // Fetch stations and populate spinners
-            fetchStations();
-
-            // Create ViewModel with context
+            // Create ViewModel with context and root view
             SeasonViewModel seasonViewModel = new ViewModelProvider(this, new ViewModelProvider.Factory() {
                 @NonNull
                 @Override
                 public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-                    return (T) new SeasonViewModel(getContext());
+                    return (T) new SeasonViewModel(getContext(), root);
                 }
             }).get(SeasonViewModel.class);
 
             // Observe seasons data
             seasonViewModel.getSeasons().observe(getViewLifecycleOwner(), seasons -> {
                 seasonList.clear();
-                seasonList.addAll(seasons);
+                if (seasons != null && !seasons.isEmpty()) {
+                    seasonList.addAll(seasons);
+                    binding.noSeasonsTextView.setVisibility(View.GONE);
+                } else {
+                    binding.noSeasonsTextView.setVisibility(View.VISIBLE);
+                }
                 seasonAdapter.notifyDataSetChanged();
             });
 
-            // Handle spinner selections
-            binding.filterButton.setOnClickListener(v -> {
-                try {
-                    String startStation = startStationSpinner.getSelectedItem().toString();
-                    String endStation = endStationSpinner.getSelectedItem().toString();
-
-                    if (!startStation.isEmpty() && !endStation.isEmpty()) {
-                        filterSeasons(startStation, endStation);
-                    } else {
-                        Toast.makeText(getContext(), "Please select both stations.", Toast.LENGTH_SHORT).show();
-                    }
-                } catch (Exception e) {
-                    Log.e(TAG, "Exception in filterButton onClick", e);
-                    Toast.makeText(getContext(), "An error occurred while filtering seasons", Toast.LENGTH_SHORT).show();
-                }
-            });
+            // Observe error messages
+            seasonViewModel.getErrorMessage().observe(getViewLifecycleOwner(), this::showError);
         } catch (Exception e) {
             Log.e(TAG, "Exception in onCreateView", e);
-            Toast.makeText(getContext(), "An error occurred during initialization", Toast.LENGTH_SHORT).show();
+            showError(e.getMessage());
         }
 
         return root;
     }
 
-    private void fetchStations() {
-        try {
-            DatabaseReference stationsReference = FirebaseDatabase.getInstance().getReference("stations");
-            stationsReference.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    try {
-                        stationsList.clear();
-                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                            String station = snapshot.getValue(String.class);
-                            if (station != null) {
-                                stationsList.add(station);
-                            }
-                        }
-                        ArrayAdapter<String> adapter = new ArrayAdapter<>(requireContext(),
-                                android.R.layout.simple_spinner_item, stationsList);
-                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                        startStationSpinner.setAdapter(adapter);
-                        endStationSpinner.setAdapter(adapter);
-                    } catch (Exception e) {
-                        Log.e(TAG, "Exception in onDataChange", e);
-                        Toast.makeText(getContext(), "An error occurred while fetching stations", Toast.LENGTH_SHORT).show();
-                    }
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-                    Log.e(TAG, "Failed to fetch stations: " + databaseError.getMessage());
-                    Toast.makeText(getContext(), "Failed to fetch stations", Toast.LENGTH_SHORT).show();
-                }
-            });
-        } catch (Exception e) {
-            Log.e(TAG, "Exception in fetchStations", e);
-            Toast.makeText(getContext(), "An error occurred while fetching stations", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    private void filterSeasons(String startStation, String endStation) {
-        try {
-            List<Season> filteredList = new ArrayList<>();
-            for (Season season : seasonList) {
-                if (season.getStartStation().equals(startStation) && season.getEndStation().equals(endStation)) {
-                    filteredList.add(season);
-                }
-            }
-
-            if (filteredList.isEmpty()) {
-                Toast.makeText(getContext(), "No matching results found.", Toast.LENGTH_SHORT).show();
-            } else {
-                seasonAdapter.updateData(filteredList);
-            }
-        } catch (Exception e) {
-            Log.e(TAG, "Exception in filterSeasons", e);
-            Toast.makeText(getContext(), "An error occurred while filtering seasons", Toast.LENGTH_SHORT).show();
-        }
+    private void showError(String errorMessage) {
+        Toast.makeText(getContext(), "An error occurred: " + errorMessage, Toast.LENGTH_LONG).show();
+        ClipboardManager clipboard = (ClipboardManager) getContext().getSystemService(Context.CLIPBOARD_SERVICE);
+        ClipData clip = ClipData.newPlainText("Error Message", errorMessage);
+        clipboard.setPrimaryClip(clip);
+        Toast.makeText(getContext(), "Error message copied to clipboard", Toast.LENGTH_SHORT).show();
     }
 
     @Override

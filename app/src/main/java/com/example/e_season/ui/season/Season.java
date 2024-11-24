@@ -8,6 +8,10 @@ public class Season {
     private String classType;
     private String userEmail;
 
+    // No-argument constructor required for Firebase
+    public Season() {
+    }
+
     public Season(String startStation, String endStation, String seasonStartDate, String seasonEndDate, String classType, String userEmail) {
         this.startStation = startStation;
         this.endStation = endStation;
