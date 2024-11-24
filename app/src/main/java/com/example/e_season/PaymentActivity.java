@@ -5,11 +5,11 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
@@ -47,7 +47,7 @@ public class PaymentActivity extends AppCompatActivity {
             submitPaymentButton.setOnClickListener(v -> submitPayment());
         } catch (Exception e) {
             Log.e(TAG, "Exception in onCreate", e);
-            showError("An error occurred during initialization: " + e.getMessage());
+            Toast.makeText(this, "An error occurred during initialization: " + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -66,7 +66,7 @@ public class PaymentActivity extends AppCompatActivity {
             datePickerDialog.show();
         } catch (Exception e) {
             Log.e(TAG, "Exception in showDatePickerDialog", e);
-            showError("An error occurred while showing date picker: " + e.getMessage());
+            Toast.makeText(this, "An error occurred while showing date picker: " + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -76,7 +76,7 @@ public class PaymentActivity extends AppCompatActivity {
             String paymentDate = paymentDateInput.getText().toString().trim();
 
             if (slipNumber.isEmpty() || paymentDate.isEmpty()) {
-                showError("Please enter all details");
+                Toast.makeText(this, "Please enter all details", Toast.LENGTH_SHORT).show();
                 return;
             }
 
@@ -113,26 +113,15 @@ public class PaymentActivity extends AppCompatActivity {
 
             databaseReference.push().setValue(seasonData).addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
-                    Snackbar.make(findViewById(android.R.id.content), "Season applied and payment submitted successfully", Snackbar.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Season applied and payment submitted successfully", Toast.LENGTH_SHORT).show();
                     finish(); // Close the activity
                 } else {
-                    showError("Failed to submit payment");
+                    Toast.makeText(this, "Failed to submit payment", Toast.LENGTH_SHORT).show();
                 }
             });
         } catch (Exception e) {
             Log.e(TAG, "Exception in submitPayment", e);
-            showError("An error occurred while submitting payment: " + e.getMessage());
+            Toast.makeText(this, "An error occurred while submitting payment: " + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
-    }
-
-    private void showError(String errorMessage) {
-        Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), errorMessage, Snackbar.LENGTH_LONG)
-                .setAction("Copy", v -> {
-                    android.content.ClipboardManager clipboard = (android.content.ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-                    android.content.ClipData clip = android.content.ClipData.newPlainText("Error Message", errorMessage);
-                    clipboard.setPrimaryClip(clip);
-                    Snackbar.make(findViewById(android.R.id.content), "Error message copied to clipboard", Snackbar.LENGTH_SHORT).show();
-                });
-        snackbar.show();
     }
 }

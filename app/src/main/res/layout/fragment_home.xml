@@ -23,13 +23,13 @@
         android:layout_marginTop="16dp"
         android:textAlignment="center" />
 
-    <!-- Image -->
+    <!-- Train Image -->
     <ImageView
         android:id="@+id/homeImage"
         android:layout_width="200dp"
         android:layout_height="200dp"
         android:layout_marginTop="16dp"
-        android:src="@drawable/ic_home_image"
+        android:src="@drawable/train_animation"
         app:layout_constraintTop_toBottomOf="@id/title"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

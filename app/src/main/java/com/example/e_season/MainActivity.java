@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
             // Navigate to LoginActivity
             Intent intent = new Intent(MainActivity.this, LoginActivity.class);
             startActivity(intent);
-            Toast.makeText(MainActivity.this, "Navigating to Login Screen", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(MainActivity.this, "Navigating to Login Screen", Toast.LENGTH_SHORT).show();
         });
     }
 }
