@@ -9,6 +9,10 @@ public class TimeTable {
     private String trainNo;
     private String trainType;
 
+    // No-argument constructor required for Firebase
+    public TimeTable() {
+    }
+
     public TimeTable(String departure, String arrival, String duration, String trainEndsAt, String trainNo, String trainType) {
         this.departure = departure;
         this.arrival = arrival;

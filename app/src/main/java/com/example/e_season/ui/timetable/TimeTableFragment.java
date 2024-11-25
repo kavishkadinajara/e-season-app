@@ -19,8 +19,11 @@ import com.example.e_season.databinding.FragmentTimetableBinding;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -79,6 +82,9 @@ public class TimeTableFragment extends Fragment {
 
             // Set date picker
             binding.searchDateEditText.setOnClickListener(v -> showDatePicker());
+
+            // Fetch timetable data from Firebase
+            fetchTimeTableFromFirebase();
         } catch (Exception e) {
             e.printStackTrace();
             showErrorSnackbar("An error occurred during initialization: " + e.getMessage());
@@ -88,23 +94,28 @@ public class TimeTableFragment extends Fragment {
     }
 
     private void fetchAndPopulateSpinners() {
-        TimeTableScraper scraper = new TimeTableScraper();
-        new Thread(() -> {
-            try {
-                List<String> startStations = scraper.getStartStations();
-                List<String> endStations = scraper.getEndStations();
+        try {
+            TimeTableScraper scraper = new TimeTableScraper();
+            new Thread(() -> {
+                try {
+                    List<String> startStations = scraper.getStartStations();
+                    List<String> endStations = scraper.getEndStations();
 
-                getActivity().runOnUiThread(() -> {
-                    populateSpinner(binding.startStationSpinner, startStations);
-                    populateSpinner(binding.endStationSpinner, endStations);
-                    showSuccessSnackbar("Fetched start and end stations successfully.");
-                });
-            } catch (IOException e) {
-                getActivity().runOnUiThread(() -> {
-                    showErrorSnackbar("Failed to fetch data: " + e.getMessage());
-                });
-            }
-        }).start();
+                    getActivity().runOnUiThread(() -> {
+                        populateSpinner(binding.startStationSpinner, startStations);
+                        populateSpinner(binding.endStationSpinner, endStations);
+                        showSuccessSnackbar("Fetched start and end stations successfully.");
+                    });
+                } catch (IOException e) {
+                    getActivity().runOnUiThread(() -> {
+                        showErrorSnackbar("Failed to fetch data: " + e.getMessage());
+                    });
+                }
+            }).start();
+        } catch (Exception e) {
+            e.printStackTrace();
+            showErrorSnackbar("An error occurred while fetching and populating spinners: " + e.getMessage());
+        }
     }
 
     private void fetchTimeTable() {
@@ -133,36 +144,89 @@ public class TimeTableFragment extends Fragment {
                 }
             }).start();
         } catch (Exception e) {
+            e.printStackTrace();
             showErrorSnackbar("An error occurred while fetching timetable: " + e.getMessage());
         }
     }
 
     private void saveTimeTableToFirebase(List<TimeTable> timeTableList) {
-        FirebaseUser user = auth.getCurrentUser();
-        if (user != null) {
-            String userEmail = user.getEmail();
-            if (userEmail != null) {
-                String sanitizedEmail = sanitizeEmail(userEmail);
-                DatabaseReference userRef = databaseReference.child(sanitizedEmail);
+        try {
+            FirebaseUser user = auth.getCurrentUser();
+            if (user != null) {
+                String userEmail = user.getEmail();
+                if (userEmail != null) {
+                    String sanitizedEmail = sanitizeEmail(userEmail);
+                    DatabaseReference userRef = databaseReference.child(sanitizedEmail);
 
-                for (TimeTable timeTable : timeTableList) {
-                    Map<String, Object> timetableData = new HashMap<>();
-                    timetableData.put("departure", timeTable.getDeparture());
-                    timetableData.put("arrival", timeTable.getArrival());
-                    timetableData.put("duration", timeTable.getDuration());
-                    timetableData.put("trainEndsAt", timeTable.getTrainEndsAt());
-                    timetableData.put("trainNo", timeTable.getTrainNo());
-                    timetableData.put("trainType", timeTable.getTrainType());
+                    for (TimeTable timeTable : timeTableList) {
+                        Map<String, Object> timetableData = new HashMap<>();
+                        timetableData.put("departure", timeTable.getDeparture());
+                        timetableData.put("arrival", timeTable.getArrival());
+                        timetableData.put("duration", timeTable.getDuration());
+                        timetableData.put("trainEndsAt", timeTable.getTrainEndsAt());
+                        timetableData.put("trainNo", timeTable.getTrainNo());
+                        timetableData.put("trainType", timeTable.getTrainType());
 
-                    userRef.push().setValue(timetableData)
-                            .addOnSuccessListener(aVoid -> Log.d(TAG, "Data saved successfully"))
-                            .addOnFailureListener(e -> Log.w(TAG, "Error saving data", e));
+                        userRef.push().setValue(timetableData)
+                                .addOnSuccessListener(aVoid -> Log.d(TAG, "Data saved successfully"))
+                                .addOnFailureListener(e -> {
+                                    Log.w(TAG, "Error saving data", e);
+                                    showErrorSnackbar("Error saving data: " + e.getMessage());
+                                });
+                    }
+                } else {
+                    showErrorSnackbar("User email is null.");
                 }
             } else {
-                showErrorSnackbar("User email is null.");
+                showErrorSnackbar("User is not authenticated.");
             }
-        } else {
-            showErrorSnackbar("User is not authenticated.");
+        } catch (Exception e) {
+            e.printStackTrace();
+            showErrorSnackbar("An error occurred while saving timetable to Firebase: " + e.getMessage());
+        }
+    }
+
+    private void fetchTimeTableFromFirebase() {
+        try {
+            FirebaseUser user = auth.getCurrentUser();
+            if (user != null) {
+                String userEmail = user.getEmail();
+                if (userEmail != null) {
+                    String sanitizedEmail = sanitizeEmail(userEmail);
+                    DatabaseReference userRef = databaseReference.child(sanitizedEmail);
+
+                    userRef.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            try {
+                                List<TimeTable> timeTableList = new ArrayList<>();
+                                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                                    TimeTable timeTable = snapshot.getValue(TimeTable.class);
+                                    if (timeTable != null) {
+                                        timeTableList.add(timeTable);
+                                    }
+                                }
+                                timeTableViewModel.setTimeTableList(timeTableList);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                showErrorSnackbar("An error occurred while processing timetable data: " + e.getMessage());
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                            showErrorSnackbar("Failed to fetch timetable data: " + databaseError.getMessage());
+                        }
+                    });
+                } else {
+                    showErrorSnackbar("User email is null.");
+                }
+            } else {
+                showErrorSnackbar("User is not authenticated.");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            showErrorSnackbar("An error occurred while fetching timetable from Firebase: " + e.getMessage());
         }
     }
 
@@ -176,10 +240,38 @@ public class TimeTableFragment extends Fragment {
             binding.endStationSpinner.setSelection(0);
             binding.searchDateEditText.setText("");
             timeTableViewModel.setTimeTableList(null);
-            showSuccessSnackbar("Fields reset successfully.");
+            deleteTimeTableFromFirebase();
+            showSuccessSnackbar("Fields reset and timetable data deleted successfully.");
         } catch (Exception e) {
             e.printStackTrace();
             showErrorSnackbar("An error occurred while resetting fields: " + e.getMessage());
+        }
+    }
+
+    private void deleteTimeTableFromFirebase() {
+        try {
+            FirebaseUser user = auth.getCurrentUser();
+            if (user != null) {
+                String userEmail = user.getEmail();
+                if (userEmail != null) {
+                    String sanitizedEmail = sanitizeEmail(userEmail);
+                    DatabaseReference userRef = databaseReference.child(sanitizedEmail);
+
+                    userRef.removeValue()
+                            .addOnSuccessListener(aVoid -> Log.d(TAG, "Timetable data deleted successfully"))
+                            .addOnFailureListener(e -> {
+                                Log.w(TAG, "Error deleting timetable data", e);
+                                showErrorSnackbar("Error deleting timetable data: " + e.getMessage());
+                            });
+                } else {
+                    showErrorSnackbar("User email is null.");
+                }
+            } else {
+                showErrorSnackbar("User is not authenticated.");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            showErrorSnackbar("An error occurred while deleting timetable from Firebase: " + e.getMessage());
         }
     }
 
@@ -214,25 +306,11 @@ public class TimeTableFragment extends Fragment {
     }
 
     private void showErrorSnackbar(String message) {
-        Snackbar snackbar = Snackbar.make(binding.getRoot(), message, Snackbar.LENGTH_LONG);
-        snackbar.setAction("Copy", v -> {
-            android.content.ClipboardManager clipboard = (android.content.ClipboardManager) getContext().getSystemService(android.content.Context.CLIPBOARD_SERVICE);
-            android.content.ClipData clip = android.content.ClipData.newPlainText("Error Message", message);
-            clipboard.setPrimaryClip(clip);
-            Snackbar.make(binding.getRoot(), "Error message copied to clipboard", Snackbar.LENGTH_SHORT).show();
-        });
-        snackbar.show();
+        Snackbar.make(binding.getRoot(), message, Snackbar.LENGTH_LONG).show();
     }
 
     private void showSuccessSnackbar(String message) {
-        Snackbar snackbar = Snackbar.make(binding.getRoot(), message, Snackbar.LENGTH_LONG);
-        snackbar.setAction("Copy", v -> {
-            android.content.ClipboardManager clipboard = (android.content.ClipboardManager) getContext().getSystemService(android.content.Context.CLIPBOARD_SERVICE);
-            android.content.ClipData clip = android.content.ClipData.newPlainText("Success Message", message);
-            clipboard.setPrimaryClip(clip);
-            Snackbar.make(binding.getRoot(), "Success message copied to clipboard", Snackbar.LENGTH_SHORT).show();
-        });
-        snackbar.show();
+        Snackbar.make(binding.getRoot(), message, Snackbar.LENGTH_LONG).show();
     }
 
     @Override

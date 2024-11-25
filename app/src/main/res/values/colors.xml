@@ -30,6 +30,8 @@
     <color name="error_text_color">#FF0000</color>
     <!-- res/values/colors.xml -->
     <color name="secondary_text_color">#757575</color>
+    <color name="header_background">#FFDDDDDD</color>
+    <color name="header_text_color">#FF000000</color>
 
 
 </resources>

@@ -31,12 +31,12 @@ public class TimeTableAdapter extends RecyclerView.Adapter<TimeTableAdapter.Time
     @Override
     public void onBindViewHolder(@NonNull TimeTableViewHolder holder, int position) {
         TimeTable timeTable = timeTables.get(position);
-        holder.departureTextView.setText(timeTable.getDeparture());
-        holder.arrivalTextView.setText(timeTable.getArrival());
-        holder.durationTextView.setText(timeTable.getDuration());
-        holder.trainEndsAtTextView.setText(timeTable.getTrainEndsAt());
-        holder.trainNoTextView.setText(timeTable.getTrainNo());
-        holder.trainTypeTextView.setText(timeTable.getTrainType());
+        holder.departureTextView.setText("Departure: " + timeTable.getDeparture());
+        holder.arrivalTextView.setText("Arrival: " + timeTable.getArrival());
+        holder.durationTextView.setText("Duration: " + timeTable.getDuration());
+        holder.trainEndsAtTextView.setText("Train Ends At: " + timeTable.getTrainEndsAt());
+        holder.trainNoTextView.setText("Train No: " + timeTable.getTrainNo());
+        holder.trainTypeTextView.setText("Train Type: " + timeTable.getTrainType());
     }
 
     @Override
