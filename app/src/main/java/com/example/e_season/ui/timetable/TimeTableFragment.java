@@ -17,13 +17,17 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.example.e_season.R;
 import com.example.e_season.databinding.FragmentTimetableBinding;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 public class TimeTableFragment extends Fragment {
 
@@ -32,6 +36,7 @@ public class TimeTableFragment extends Fragment {
     private FragmentTimetableBinding binding;
     private TimeTableAdapter adapter;
     private TimeTableViewModel timeTableViewModel;
+    private DatabaseReference databaseReference;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -40,6 +45,8 @@ public class TimeTableFragment extends Fragment {
 
         binding = FragmentTimetableBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
+
+        databaseReference = FirebaseDatabase.getInstance().getReference("timetable");
 
         try {
             // Initialize RecyclerView
@@ -112,6 +119,7 @@ public class TimeTableFragment extends Fragment {
                             showErrorSnackbar("No timetable data found.");
                         } else {
                             showSuccessSnackbar("Fetched timetable data successfully.");
+                            saveTimeTableToFirebase(timeTableList);
                         }
                     });
                 } catch (IOException e) {
@@ -122,6 +130,22 @@ public class TimeTableFragment extends Fragment {
             }).start();
         } catch (Exception e) {
             showErrorSnackbar("An error occurred while fetching timetable: " + e.getMessage());
+        }
+    }
+
+    private void saveTimeTableToFirebase(List<TimeTable> timeTableList) {
+        for (TimeTable timeTable : timeTableList) {
+            Map<String, Object> timetableData = new HashMap<>();
+            timetableData.put("departure", timeTable.getDeparture());
+            timetableData.put("arrival", timeTable.getArrival());
+            timetableData.put("duration", timeTable.getDuration());
+            timetableData.put("trainEndsAt", timeTable.getTrainEndsAt());
+            timetableData.put("trainNo", timeTable.getTrainNo());
+            timetableData.put("trainType", timeTable.getTrainType());
+
+            databaseReference.push().setValue(timetableData)
+                    .addOnSuccessListener(aVoid -> Log.d(TAG, "Data saved successfully"))
+                    .addOnFailureListener(e -> Log.w(TAG, "Error saving data", e));
         }
     }
 
