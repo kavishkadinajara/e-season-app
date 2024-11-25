@@ -17,6 +17,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.example.e_season.R;
 import com.example.e_season.databinding.FragmentTimetableBinding;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -37,6 +39,7 @@ public class TimeTableFragment extends Fragment {
     private TimeTableAdapter adapter;
     private TimeTableViewModel timeTableViewModel;
     private DatabaseReference databaseReference;
+    private FirebaseAuth auth;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -47,6 +50,7 @@ public class TimeTableFragment extends Fragment {
         View root = binding.getRoot();
 
         databaseReference = FirebaseDatabase.getInstance().getReference("timetable");
+        auth = FirebaseAuth.getInstance();
 
         try {
             // Initialize RecyclerView
@@ -134,19 +138,36 @@ public class TimeTableFragment extends Fragment {
     }
 
     private void saveTimeTableToFirebase(List<TimeTable> timeTableList) {
-        for (TimeTable timeTable : timeTableList) {
-            Map<String, Object> timetableData = new HashMap<>();
-            timetableData.put("departure", timeTable.getDeparture());
-            timetableData.put("arrival", timeTable.getArrival());
-            timetableData.put("duration", timeTable.getDuration());
-            timetableData.put("trainEndsAt", timeTable.getTrainEndsAt());
-            timetableData.put("trainNo", timeTable.getTrainNo());
-            timetableData.put("trainType", timeTable.getTrainType());
+        FirebaseUser user = auth.getCurrentUser();
+        if (user != null) {
+            String userEmail = user.getEmail();
+            if (userEmail != null) {
+                String sanitizedEmail = sanitizeEmail(userEmail);
+                DatabaseReference userRef = databaseReference.child(sanitizedEmail);
 
-            databaseReference.push().setValue(timetableData)
-                    .addOnSuccessListener(aVoid -> Log.d(TAG, "Data saved successfully"))
-                    .addOnFailureListener(e -> Log.w(TAG, "Error saving data", e));
+                for (TimeTable timeTable : timeTableList) {
+                    Map<String, Object> timetableData = new HashMap<>();
+                    timetableData.put("departure", timeTable.getDeparture());
+                    timetableData.put("arrival", timeTable.getArrival());
+                    timetableData.put("duration", timeTable.getDuration());
+                    timetableData.put("trainEndsAt", timeTable.getTrainEndsAt());
+                    timetableData.put("trainNo", timeTable.getTrainNo());
+                    timetableData.put("trainType", timeTable.getTrainType());
+
+                    userRef.push().setValue(timetableData)
+                            .addOnSuccessListener(aVoid -> Log.d(TAG, "Data saved successfully"))
+                            .addOnFailureListener(e -> Log.w(TAG, "Error saving data", e));
+                }
+            } else {
+                showErrorSnackbar("User email is null.");
+            }
+        } else {
+            showErrorSnackbar("User is not authenticated.");
         }
+    }
+
+    private String sanitizeEmail(String email) {
+        return email.replace(".", "_").replace("@", "_");
     }
 
     private void resetFields() {
