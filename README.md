@@ -9,26 +9,14 @@
 ### Mobile App (User-Facing):  
 - **🔑 User Registration & Authentication**  
    Secure account setup and login options using Supabase.  
-- **📊 Real-Time Ticket Availability**  
+- **📊 Real-Time Season Availability**  
    Instant access to season ticket options and pricing.  
 - **👤 Profile Management & Purchase History**  
    Manage profile details and view ticket purchase history.  
-- **🔔 Notifications & Alerts**  
-   Stay updated on ticket availability, promotions, and schedule changes.  
-- **📶 Offline Ticket Access**  
+- **📶 Offline Season Access**  
    View tickets offline with on-device SQLite storage.  
-- **📱 Mobile Ticket Validation**  
-   QR code-based ticket validation for easy scanning.  
-
-### Admin Panel (Web-Based):  
-- **👤 Admin Authentication**  
-   Login securely using Supabase authentication.  
-- **📂 Manage Users**  
-   View, edit, and deactivate passenger accounts.  
-- **📊 Ticket Reports**  
-   Monitor ticket sales and generate insightful reports.  
-- **🔧 Station Management**  
-   Add, update, or remove train stations and routes.  
+- **📱 Mobile Season Validation**  
+   QR code-based ticket validation for easy scanning.    
 
 ---
 
@@ -37,7 +25,7 @@
 ### Mobile App:  
 - **Android Studio**  
    Development environment for building the app.  
-- **Supabase**  
+- **Firebase**  
    Real-time database and secure authentication.  
 - **SQLite**  
    Offline data storage for tickets.  
@@ -45,14 +33,6 @@
    Displays nearby train stations.  
 - **Retrofit**  
    Handles network requests efficiently.  
-
-### Admin Panel:  
-- **Next.js**  
-   Framework for developing the admin web app.  
-- **Supabase**  
-   Backend database for managing user and ticket data.  
-- **Tailwind CSS**  
-   For responsive and modern UI design.  
 
 ---
 
@@ -62,9 +42,6 @@
 - **Daily Commuters** – Save time with faster ticketing.  
 - **Students** – Easy access to discounted tickets.  
 - **Senior Citizens** – Accessible features for hassle-free travel.  
-
-### Admins:  
-- Railway staff managing passenger data, ticketing, and train schedules.  
 
 ---
 
